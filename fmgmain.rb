@@ -45,7 +45,7 @@ fazapi = FmgApi.new(opts[:wsdl_file], 'https://10.0.1.15:8080', opts[:namespace]
 #myresult = fmgapi.get_device_license_list
 #myresult = fazapi.get_device_list
 #myresult = fmgapi.get_device_vdom_list(:dev_id => '234')
-#myresult = fazapi.get_faz_archive({:adom => 'root', :dev_id => 'FWF60D4613000043', :file_name => '1712625325:0', :type => '6'})
+myresult = fazapi.get_faz_archive({:adom => 'root', :dev_id => 'FWF60D4613000043', :file_name => '1712625325:0', :type => '6'})
 #myresult = fazapi.get_faz_archive({:dev_id => 'FWF60D4613000043', :file_name => '1712625325:0', :type => '6'})
 #myresult = fazapi.get_faz_config
 #myresult = fmgapi.get_fmg_config
@@ -57,7 +57,7 @@ fazapi = FmgApi.new(opts[:wsdl_file], 'https://10.0.1.15:8080', opts[:namespace]
 #myresult = fmgapi.get_script(:script_name => 'cli-sys-status')
 #myresult = fmgapi.get_script_log({:script_name => 'cli-sys-status', :sn => 'FGVM020000018110'})
 #myresult = fmgapi.get_script_log_summary({:sn => 'FGVM020000018110', :max_logs => '200'})
-myresult = fmgapi.get_system_status()
+#myresult = fmgapi.get_system_status()
 #myresult = fmgapi.get_task_detail('186', 'customerA')
 #myresult = fmgapi.import_policy({:adom_name => 'root', :dev_name => 'MSSP-1', :vdom_name => 'root'})
 #myresult = fmgapi.install_config({:adom => 'root', :pkgoid => '572', :dev_id => '234', :rev_name => 'API Install'})
@@ -66,6 +66,7 @@ myresult = fmgapi.get_system_status()
 #myresult = fazapi.remove_faz_archive({:adom => 'root', :dev_id => 'FWF60D4613000043', :file_name => '1712625326:0', :type => '6'})
 #myresult = fmgapi.retrieve_config({:dev_id => '234', :rev_name => 'API-Retrieve'})
 #myresult = fmgapi.revert_config({:rev_id => '4', :dev_id => '234'})
+#myresult = fazapi.run_faz_report({:report_template => 'Admin and System Events Report'})
 
 
 

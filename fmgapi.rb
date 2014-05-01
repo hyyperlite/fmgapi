@@ -11,6 +11,8 @@ require 'time'
 ### Uses Savon Gem for SOAP query/response handling.  Most Savon arguments are pre-set with values that are known
 ### to work with FortiManager and FortiAnalyzer.
 ###
+### This has been tested against FortiManager/FortiAnalyzer 5.0.7
+###
 ### Usage example:
 ###  fmg1 = FmgApi.new('wsdl_file_location', 'url', 'namespace', 'userid', 'passwd')
 ###  result = fmg1.get_adom_list
@@ -80,7 +82,7 @@ class FmgApi
     querymsg[:names] = opts[:adom] ? opts[:adom] : 'root'
 
     begin
-      result = exec_soap_query(:get_adoms,querymsg,:get_adoms_response,:adom_detail)
+      exec_soap_query(:get_adoms,querymsg,:get_adoms_response,:adom_detail)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -92,14 +94,14 @@ class FmgApi
   ##
   ## Retrieves VDOM info for a specified VDOM ID and returns a hash of VDOM attributes
   ##  get_adom_by_oid() OR  [Note:  if no parameter is passed, defaults to OID=3 (should be root)]
-  ##  get_adom_by_oid(:adom => 'adom_oid')  ##  if no parameter is passed defaults to OID=3
+  ##  get_adom_by_oid(:adom_id => 'adom_oid')  ##  if no parameter is passed defaults to OID=3
   #############################################################################################
   def get_adom_by_oid(opts = {})
     querymsg = @authmsg
-    querymsg[:adomIds] = opts[:adom] ? opts[:adom] : '3'
+    querymsg[:adom_ids] = opts[:adom_id] ? opts[:adom_id] : '3'
 
     begin
-      result = exec_soap_query(:get_adoms,querymsg,:get_adoms_response,:adom_detail)
+      exec_soap_query(:get_adoms,querymsg,:get_adoms_response,:adom_detail)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -116,7 +118,7 @@ class FmgApi
     querymsg = @authmsg
 
     begin
-      result = exec_soap_query(:get_adom_list,querymsg,:get_adom_list_response,:adom_info)
+      exec_soap_query(:get_adom_list,querymsg,:get_adom_list_response,:adom_info)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -136,26 +138,23 @@ class FmgApi
   #####################################################################################################################
   def get_config (opts={})
     querymsg = @authmsg
+    querymsg[:adom] = opts[:adom] if opts[:adom]
 
     begin
       if opts[:serial_number] && opts[:revision_number]
         querymsg[:serial_number] = opts[:serial_number]
         querymsg[:revision_number] = opts[:revision_number]
-        querymsg[:adom] = opts[:adom] if opts[:adom]
-        result = exec_soap_query(:get_config,querymsg,:get_config_response,:return)
       elsif opts[:dev_id] && opts[:revision_number]
         querymsg[:dev_id] = opts[:dev_id]
         querymsg[:revision_number] = opts[:revision_number]
-        querymsg[:adom] = opts[:adom] if opts[:adom]
-        result = exec_soap_query(:get_config,querymsg,:get_config_response,:return)
       else
         raise ArgumentError.new('Must provide arguments for method get_config-> :revision_number AND (:dev_name OR :dev_id)')
       end
+      exec_soap_query(:get_config,querymsg,:get_config_response,:return)
     rescue Exception => e
       fmg_rescue(e)
       return e
     end
-    return result
   end
 
   #####################################################################################################################
@@ -165,7 +164,7 @@ class FmgApi
   ## Must supply arguments in the form of ONE of the following:
   ##  get_config_revision_history(:serial_number => 'XXX')  OR
   ##  get_config_revision_history(:dev_id => 'XXX')  OR
-  ## Additional Options can be used to filter further including:
+  ## Additional Options can be used to filter including:
   ##  :checkin_user,
   ##  :min_checkin_date and/or :max_checking_date,  [NOTE: if min/max are both passed and max occurs before min then no date filter will be used]
   ##  :min_revision_number and/or :max_revision_number  [NOTE: if min/max are both passed and min > max then no revision number filter will be used]
@@ -217,13 +216,14 @@ class FmgApi
     begin
       if opts[:serial_number]
         querymsg[:serial_number] = opts[:serial_number]
-        result = exec_soap_query(:get_config_revision_history,querymsg,:get_config_revision_history_response,:return)
       elsif opts[:dev_id]
         querymsg[:dev_id] = opts[:dev_id]
-        result = exec_soap_query(:get_config_revision_history,querymsg,:get_config_revision_history_response,:return)
       else
         raise ArgumentError.new('Must provide arguments for method get_config_revision_history-> :serial_number OR :dev_id')
       end
+
+      exec_soap_query(:get_config_revision_history,querymsg,:get_config_revision_history_response,:return)
+
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -249,7 +249,7 @@ class FmgApi
       else
         raise ArgumentError.new('Must provide arguments for method get_device_vdom_list->  :serial_number or :dev_id')
       end
-      result = exec_soap_query(:get_devices,querymsg,:get_devices_response,:device_detail)
+      exec_soap_query(:get_devices,querymsg,:get_devices_response,:device_detail)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -269,7 +269,7 @@ class FmgApi
     querymsg = @authmsg
 
     begin
-      result = exec_soap_query(:get_device_license_list,querymsg,:get_device_license_list_response,:return)
+      exec_soap_query(:get_device_license_list,querymsg,:get_device_license_list_response,:return)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -284,13 +284,13 @@ class FmgApi
   ##  get_device_list() OR  [Note:  if no arguments are passed defaults to retreiving device list from root ADOM]
   ##  get_device_list(:adom => 'adom_name')
   #####################################################################################################################
-  def get_device_list (opts = {})
+  def get_device_list (opts={})
     querymsg = @authmsg
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
     querymsg[:detail] = 1
 
     begin
-      result = exec_soap_query(:get_device_list,querymsg,:get_device_list_response,:device_detail)
+      exec_soap_query(:get_device_list,querymsg,:get_device_list_response,:device_detail)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -316,7 +316,7 @@ class FmgApi
       else
         raise ArgumentError.new('Must provide arguments for method get_device_vdom_list->  :dev_name or :dev_id')
       end
-      result = exec_soap_query(:get_device_vdom_list,querymsg,:get_device_vdom_list_response,:return)
+      exec_soap_query(:get_device_vdom_list,querymsg,:get_device_vdom_list_response,:return)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -352,10 +352,10 @@ class FmgApi
         querymsg[:dev_id] = opts[:dev_id]
         querymsg[:file_name] = opts[:file_name]
         querymsg[:type] = opts[:type]
-        result = exec_soap_query(:get_faz_archive,querymsg,:get_faz_archive_response,:file_list)
       else
         raise ArgumentError.new('Must provide required arguments for method-> :adom, :dev_id, :file_name, :type')
       end
+      exec_soap_query(:get_faz_archive,querymsg,:get_faz_archive_response,:file_list)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -372,7 +372,7 @@ class FmgApi
     querymsg = @authmsg
 
     begin
-      result = exec_soap_query(:get_faz_config,querymsg,:get_faz_config_response,:config)
+      exec_soap_query(:get_faz_config,querymsg,:get_faz_config_response,:config)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -381,7 +381,9 @@ class FmgApi
 alias :get_fmg_config :get_faz_config
 
   #####################################################################################################################
-  ## Method: get_faz_generated_report  ************** Not Working ************************
+  ## Method: get_faz_generated_report
+  ##
+  ##                      **************** Not Working ************************
   ##
   ##
   ## Must include arguments adom, dev_id, file_name & type as in following example:
@@ -422,13 +424,13 @@ alias :get_fmg_config :get_faz_config
   ##  get_group_list() OR
   ##  get_group_list (:adom => 'adom_name')
   #####################################################################################################################
-  def get_group_list(opts = {})
+  def get_group_list(opts={})
     querymsg = @authmsg
     querymsg[:detail] = 1
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
 
     begin
-      result = exec_soap_query(:get_group_list,querymsg,:get_group_list_response,:group_detail)
+      exec_soap_query(:get_group_list,querymsg,:get_group_list_response,:group_detail)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -458,7 +460,7 @@ alias :get_fmg_config :get_faz_config
       else
         raise ArgumentError.new('Must provide required arguments for method-> :name OR :grp_id')
       end
-      result = exec_soap_query(:get_groups,querymsg,:get_groups_response,:group_detail)
+      exec_soap_query(:get_groups,querymsg,:get_groups_response,:group_detail)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -476,16 +478,16 @@ alias :get_fmg_config :get_faz_config
   #####################################################################################################################
   def get_instlog(opts={})
     querymsg = @authmsg
+    querymsg[:task_id] = opts[:task_id] if opts[:task_id]
 
     begin
       if opts[:dev_id] || opts[:serial_number]
         querymsg[:dev_id] = opts[:dev_id] if opts[:dev_id]
         querymsg[:serial_number] = opts[:serial_number] if opts[:serial_number]
-        querymsg[:task_id] = opts[:task_id] if opts[:task_id]
       else
         raise ArgumentError.new('Must provide required arguments for method-> :dev_id or :serial_number')
       end
-      result = exec_soap_query(:get_instlog,querymsg,:get_instlog_response,:inst_log)
+      exec_soap_query(:get_instlog,querymsg,:get_instlog_response,:inst_log)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -499,12 +501,12 @@ alias :get_fmg_config :get_faz_config
   ##  get_package_list()  OR
   ##  get_package_list('adom_name')
   #####################################################################################################################
-  def get_package_list(opts = {})
+  def get_package_list(opts={})
     querymsg = @authmsg
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
 
     begin
-      result = exec_soap_query(:get_package_list,querymsg,:get_package_list_response,:return)
+      exec_soap_query(:get_package_list,querymsg,:get_package_list_response,:return)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -517,7 +519,7 @@ alias :get_fmg_config :get_faz_config
   ## Retrieves script details.
   ##  get_script(:script_name => 'script_name')
   #####################################################################################################################
-  def get_script(opts = {})
+  def get_script(opts={})
     querymsg = @authmsg
 
     if opts[:script_name]
@@ -527,7 +529,7 @@ alias :get_fmg_config :get_faz_config
     end
 
     begin
-      result = exec_soap_query(:get_script,querymsg,:get_script_response,:return)
+      exec_soap_query(:get_script,querymsg,:get_script_response,:return)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -541,7 +543,7 @@ alias :get_fmg_config :get_faz_config
   ##  get_script_log({:script_name => 'script_name', :dev_id => 'device_id'}) OR
   ##  get script_log({:script_name => 'script_name, :serial_number => 'serial_number})
   #####################################################################################################################
-  def get_script_log(opts = {})
+  def get_script_log(opts={})
     querymsg = @authmsg
 
     begin
@@ -553,8 +555,7 @@ alias :get_fmg_config :get_faz_config
       else
         raise ArgumentError.new('Must provide required arguments for method: (:script_name & :dev_id ) or (:script_name & :serial_number)')
       end
-
-      result = exec_soap_query(:get_script_log,querymsg,:get_script_log_response,:return)
+      exec_soap_query(:get_script_log,querymsg,:get_script_log_response,:return)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -570,23 +571,21 @@ alias :get_fmg_config :get_faz_config
   ##  get_script_log_summary({:dev_id => 'device_id', max_logs => '#'}) OR
   ##  get_script_log_summary({:serial_number => 'serial_number', max_logs => '#'})
   #####################################################################################################################
-  def get_script_log_summary(opts = {})
+  def get_script_log_summary(opts={})
     querymsg = @authmsg
-    querymsg[:max_logs] = 1000
-    querymsg[:max_logs] = opts[:max_logs] if opts[:max_logs]
+    querymsg[:max_logs] = opts[:max_logs] ? opts[:max_logs] : '1000'
 
     begin
       if opts[:dev_id] && opts[:serial_number]
-        raise ArgumentError.new('Must provide required arguments for method: :script_name OR :serial_number (not both)')
+        raise ArgumentError.new('Must provide required arguments for method-> :script_name OR :serial_number (not both)')
       elsif opts[:dev_id]
         querymsg[:dev_id] = opts[:dev_id]
       elsif opts[:serial_number]
         querymsg[:serial_number] = opts[:serial_number]
       else
-        raise ArgumentError.new('Must provide required arguments for method: :script_name or :serial_number')
+        raise ArgumentError.new('Must provide required arguments for method-> :script_name or :serial_number')
       end
-
-      result = exec_soap_query(:get_script_log_summary,querymsg,:get_script_log_summary_response,:return)
+      exec_soap_query(:get_script_log_summary,querymsg,:get_script_log_summary_response,:return)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -599,12 +598,11 @@ alias :get_fmg_config :get_faz_config
   ## Retrieves summary of executed scripts for a specific device.  If adom is not provided it defaults to root ADOM
   ##  get_system_status()
   #####################################################################################################################
-  def get_system_status(opts = {})
+  def get_system_status()
     querymsg = @authmsg
-    #querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
 
     begin
-      result = exec_soap_query_for_get_sys_status(:get_system_status,querymsg,:get_system_status_response)
+      exec_soap_query_for_get_sys_status(:get_system_status,querymsg,:get_system_status_response)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -618,7 +616,7 @@ alias :get_fmg_config :get_faz_config
   ##  get_task_detail('task_id') OR
   ##  get_task_detail('task_id', 'adom_name')   #if ADOM is not provided it defaults to root ADOM
   #####################################################################################################################
-  def get_task_detail(opts = {})
+  def get_task_detail(opts={})
     querymsg = @authmsg
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
     
@@ -628,7 +626,7 @@ alias :get_fmg_config :get_faz_config
       else
         raise ArgumentError.new('Must provide required arguments for method-> :task_id')
       end
-      result = exec_soap_query(:get_task_list,querymsg,:get_task_list_response,:task_list)
+      exec_soap_query(:get_task_list,querymsg,:get_task_list_response,:task_list)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -644,7 +642,7 @@ alias :get_fmg_config :get_faz_config
   ##   import_policy({:adom_id => '3', :dev_id => '234', :vdom_id => '3'})
   ##   import_policy({:adom_name => 'root', :dev_id => '234', :vdom_name => 'root'})
   #####################################################################################################################
-  def import_policy(opts = {})
+  def import_policy(opts={})
     querymsg = @authmsg
 
     begin
@@ -680,7 +678,7 @@ alias :get_fmg_config :get_faz_config
         raise ArgumentError.new('Must provide required arguments for method-> (:adom_id OR :adom_name) AND (:dev_id OR :dev_name) AND (:vdom_id OR :vdom_name)')
       end
      
-      result = exec_soap_query(:import_policy,querymsg,:import_policy_response,:report)
+      exec_soap_query(:import_policy,querymsg,:import_policy_response,:report)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -700,27 +698,24 @@ alias :get_fmg_config :get_faz_config
   ## Example:
   ##  install_config({:adom => 'root', :pkgoid => '572', :dev_id => '234', :rev_name => 'API Install'}
   #####################################################################################################################
-  def install_config(opts = {})
+  def install_config(opts={})
     querymsg = @authmsg
-    #querymsg.merge!(opts)
-
-    if opts[:adom] && opts[:pkgoid] && opts[:dev_id]
-      querymsg[:adom] = opts[:adom]
-      querymsg[:pkgoid] = opts[:oid]
-      querymsg[:dev_id] = opts[:dev_id]
-    elsif opts[:adom] && opts[:pkgoid] && opts[:serial_number]
-      querymsg[:adom] = opts[:adom]
-      querymsg[:pkgoid] = opts[:oid]
-      querymsg[:serial_number] = opts[:serial_number]
-    else
-      raise ArgumentError.new('Must provide required arguments for method: :adom AND :pkgoid AND (:dev_id OR :serial_number')
-    end
-
     querymsg[:new_rev_name] = opts[:rev_name] if opts[:rev_name]
     querymsg[:install_validate] = opts[:validate] if opts[:validate]
 
     begin
-      result = exec_soap_query(:install_config,querymsg,:install_config_response,:task_id)
+      if opts[:adom] && opts[:pkgoid] && opts[:dev_id]
+        querymsg[:adom] = opts[:adom]
+        querymsg[:pkgoid] = opts[:oid]
+        querymsg[:dev_id] = opts[:dev_id]
+      elsif opts[:adom] && opts[:pkgoid] && opts[:serial_number]
+        querymsg[:adom] = opts[:adom]
+        querymsg[:pkgoid] = opts[:oid]
+        querymsg[:serial_number] = opts[:serial_number]
+      else
+        raise ArgumentError.new('Must provide required arguments for method-> :adom AND :pkgoid AND (:dev_id OR :serial_number')
+      end
+      exec_soap_query(:install_config,querymsg,:install_config_response,:task_id)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -744,15 +739,9 @@ alias :get_fmg_config :get_faz_config
   #####################################################################################################################
   def list_faz_generated_reports(opts={})
     querymsg = @authmsg
+    querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
 
-    if opts.is_a?(Hash)
-      if opts.has_key?(:adom)
-        querymsg[:adom] =  opts[:adom]
-      else
-        querymsg[:adom] = 'root'
-      end
-
-      if opts.has_key?(:start_date) && opts.has_key?(:end_date)
+      if opts[:start_date] && opts[:end_date]
         startdate = DateTime.parse(opts[:start_date]).strftime("%Y-%m-%dT%H:%M:%S") rescue false
         enddate = DateTime.parse(opts[:end_date]).strftime("%Y-%m-%dT%H:%M:%S") rescue false
         if startdate && enddate
@@ -771,13 +760,12 @@ alias :get_fmg_config :get_faz_config
     end
 
     begin
-      result = exec_soap_query(:list_faz_generated_reports,querymsg,:list_faz_generated_reports_response,:report_list)
+      exec_soap_query(:list_faz_generated_reports,querymsg,:list_faz_generated_reports_response,:report_list)
     rescue Exception => e
       fmg_rescue(e)
       return e
     end
   end
-
 
   #####################################################################################################################
   ## Method: list_revision_id
@@ -788,8 +776,9 @@ alias :get_fmg_config :get_faz_config
   ##  list_revision_id({:serial_number => 'serial_number', rev_name => 'revision_name') OR
   ##  list_revision_id({:dev_id => 'device_id', rev_name => 'revision_name')
   #####################################################################################################################
-  def list_revision_id(opts = {})
+  def list_revision_id(opts={})
     querymsg = @authmsg
+    querymsg[:rev_name] = opts[:rev_name] if opts[:rev_name]
 
     begin
       if opts[:serial_number]
@@ -797,10 +786,9 @@ alias :get_fmg_config :get_faz_config
       elsif opts[:dev_id]
         querymsg[:dev_id] = opts[:dev_id]
       else
-        raise ArgumentError.new('Must provide required arguments for method: :dev_id OR :serial_number')
+        raise ArgumentError.new('Must provide required arguments for method-> :dev_id OR :serial_number')
       end
-      querymsg[:rev_name] = opts[:rev_name] if opts[:rev_name]
-      result = exec_soap_query(:list_revision_id,querymsg,:list_revision_id_response,:rev_id)
+      exec_soap_query(:list_revision_id,querymsg,:list_revision_id_response,:rev_id)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -808,8 +796,10 @@ alias :get_fmg_config :get_faz_config
   end
 
   #####################################################################################################################
-  ## Method: removes_faz_archive
-  ## removes specified archive file.  (Filename is required and can be retrieved from associated FAZ log
+  ## Method: remove_faz_archive  (returns Hash)   (Returns: Hash)   returned result contains error_code and
+  ##  error_message hash keys.  :error_code=0 (successful), :error_code=1 (failed)
+  ##
+  ## Removes specified archive file.  (Filename is required and can be retrieved from associated FAZ log
   ## incident serial number)
   ##
   ## Must include arguments adom, dev_id, file_name & type as in following example:
@@ -827,25 +817,23 @@ alias :get_fmg_config :get_faz_config
   #####################################################################################################################
   def remove_faz_archive (opts={})
     querymsg = @authmsg
-    #querymsg[:compression] = 'gzip'
-    #querymsg[:zip_password] = 'test'
+    #querymsg[:compression] = 'gzip'    #parameter does not seem to work so it is not included as option right now
+    #querymsg[:zip_password] = 'test'   #parameter does not seem to work so it is not included as option right now
 
     begin
       if opts.empty?
-        raise ArgumentError.new('Must provide required arguments for method: :adom, :dev_id, :file_name, :type')
+        raise ArgumentError.new('Must provide required arguments for method-> :adom, :dev_id, :file_name, :type')
       else
         if opts.has_key?(:adom) && opts.has_key?(:dev_id) && opts.has_key?(:file_name) && opts.has_key?(:type)
-          #querymsg.merge!(opts)
           querymsg[:adom] = opts[:adom]
           querymsg[:dev_id] = opts[:dev_id]
           querymsg[:file_name] = opts[:file_name]
           querymsg[:type] = opts[:type]
-          result = exec_soap_query(:remove_faz_archive,querymsg,:remove_faz_archive_response,:error_msg)
-          return result[error_msg][error_msg]
         else
-          raise ArgumentError.new('Must provide required arguments for method: :adom, :dev_id, :file_name, :type')
+          raise ArgumentError.new('Must provide required arguments for method-> :adom, :dev_id, :file_name, :type')
         end
       end
+      exec_soap_query(:remove_faz_archive,querymsg,:remove_faz_archive_response,:error_msg)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -865,8 +853,9 @@ alias :get_fmg_config :get_faz_config
   ##   NOTE: when providing a :rev_name do not use spaces in the revision name as the FMG will interpret this as
   ##     multiple name entries and will fail because the number of names does not match number of devices.
   #####################################################################################################################
-  def retrieve_config(opts = {})
+  def retrieve_config(opts={})
     querymsg = @authmsg
+    querymsg[:new_rev_name] = opts[:rev_name] if opts[:rev_name]
 
     begin
       if opts[:serial_number]
@@ -874,16 +863,14 @@ alias :get_fmg_config :get_faz_config
       elsif opts[:dev_id]
         querymsg[:dev_id] = opts[:dev_id]
       else
-        raise ArgumentError.new('Must provide required arguments for method: :dev_id OR :serial_number')
+        raise ArgumentError.new('Must provide required arguments for method-> :dev_id OR :serial_number')
       end
-      querymsg[:new_rev_name] = opts[:rev_name] if opts[:rev_name]
-      result = exec_soap_query(:retrieve_config,querymsg,:retrieve_config_response,:task_id)
+      exec_soap_query(:retrieve_config,querymsg,:retrieve_config_response,:task_id)
     rescue Exception => e
       fmg_rescue(e)
       return e
     end
   end
-
 
   #####################################################################################################################
   ## Method: revert config  (Returns: Hash)   returned result contains error_code and error_message hash keys.
@@ -893,7 +880,7 @@ alias :get_fmg_config :get_faz_config
   ##  revert_config({rev_id => 'rev#', :serial_number => 'XXXXXXXXXXXXX'}) OR
   ##  retrieve_config({rev_id => 'rev#', :dev_id => 'XXX'})
   #####################################################################################################################
-  def revert_config(opts = {})
+  def revert_config(opts={})
     querymsg = @authmsg
 
     begin
@@ -904,9 +891,9 @@ alias :get_fmg_config :get_faz_config
         querymsg[:dev_id] = opts[:dev_id]
         querymsg[:rev_id] = opts[:rev_id]
       else
-        raise ArgumentError.new('Must provide required arguments for method: :dev_id OR :serial_number in AND :rev_id')
+        raise ArgumentError.new('Must provide required arguments for method-> :dev_id OR :serial_number in AND :rev_id')
       end
-      result = exec_soap_query(:revert_config,querymsg,:revert_config_response,:error_msg)
+      exec_soap_query(:revert_config,querymsg,:revert_config_response,:error_msg)
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -914,23 +901,28 @@ alias :get_fmg_config :get_faz_config
   end
 
   #####################################################################################################################
-  ## Method: run_faz_report  (Returns: )   r
+  ## Method: run_faz_report  (Returns: Hash)   returned result contains error_code and error_message hash keys.
   ##  :error_code=0 (successful), :error_code=1 (failed)
   ##
+  ##   ************** Still need to identify filter options and test those *********
   ##
+  ##  Usages:
+  ##   run_faz_report(:report_template => 'report_name'
+  ##   run_faz_report({:report_template => 'report_name', :filter => 'filters'})
+  ##   run_faz_report({:report_template => 'report_name', :filter => 'filters', :adom = 'adom_name'})
   #####################################################################################################################
   def run_faz_report(opts = {})
     querymsg = @authmsg
+    querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
+    querymsg[:filter] = opts[:filter] if opts[:filter]
 
     begin
-      if opts[adom] && opts[:report_template]
-        querymsg[:adom] = opts[:adom]
+      if opts[:report_template]
         querymsg[:report_template] = opts[:report_template]
       else
-        raise ArgumentError.new('Must provide required arguments for method: :adom AND :report_template')
+        raise ArgumentError.new('Must provide required arguments for method-> :adom AND :report_template')
       end
-      querymsg[:filter] = opts[:filter] if opts[:filter]
-      result = exec_soap_query(:run_faz_report,querymsg,:run_faz_report_response,:error_msg)
+      exec_soap_query(:run_faz_report,querymsg,:run_faz_report_response,:error_msg)
     rescue Exception => e
       fmg_rescue(e)
       return e
