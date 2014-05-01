@@ -179,8 +179,8 @@ class FmgApi
     ### min and max checkin dates have been provided that the min date comes before the max.  If not, execute without
     ### using checkin date filters.
     if opts[:min_checkin_date] && opts[:max_checkin_date]
-      date_min_checkin = DateTime.parse(opts[:min_checkin_date]).strftime("%Y-%m-%dT%H:%M:%S") rescue false
-      date_max_checkin = DateTime.parse(opts[:max_checkin_date]).strftime("%Y-%m-%dT%H:%M:%S") rescue false
+      date_min_checkin = DateTime.parse(opts[:min_checkin_date]).strftime('%Y-%m-%dT%H:%M:%S') rescue false
+      date_max_checkin = DateTime.parse(opts[:max_checkin_date]).strftime('%Y-%m-%dT%H:%M:%S') rescue false
       if date_max_checkin && date_min_checkin
         if date_max_checkin >= date_min_checkin
           querymsg[:min_checkin_date] = date_min_checkin
@@ -192,10 +192,10 @@ class FmgApi
         puts 'Invalid date formats provided in attributes :max_checkin_date or :min_checkin_date, executing without min/max checkin-date filter'
       end
     elsif opts[:min_checkin_date]
-      date_min_checkin = DateTime.parse(opts[:min_checkin_date]).strftime("%Y-%m-%dT%H:%M:%S") rescue false
+      date_min_checkin = DateTime.parse(opts[:min_checkin_date]).strftime('%Y-%m-%dT%H:%M:%S') rescue false
       querymsg[:min_checkin_date] = date_min_checkin if date_min_checkin
     elsif opts[:max_checkin_date]
-      date_max_checkin = DateTime.parse(opts[:max_checkin_date]).strftime("%Y-%m-%dT%H:%M:%S") rescue false
+      date_max_checkin = DateTime.parse(opts[:max_checkin_date]).strftime('%Y-%m-%dT%H:%M:%S') rescue false
       querymsg[:max_checkin_date] = date_max_checkin if date_max_checkin
     end
 
@@ -399,7 +399,7 @@ alias :get_fmg_config :get_faz_config
     #querymsg[:report_name] = 'Bandwidth and Applications Report'
     #querymsg[:compression] = 'tar'
 
-    result = exec_soap_query(:get_faz_generated_report,querymsg,:get_faz_generated_report_response,:return)
+    exec_soap_query(:get_faz_generated_report,querymsg,:get_faz_generated_report_response,:return)
 
     #begin
     #  if opts.empty?
@@ -598,7 +598,7 @@ alias :get_fmg_config :get_faz_config
   ## Retrieves summary of executed scripts for a specific device.  If adom is not provided it defaults to root ADOM
   ##  get_system_status()
   #####################################################################################################################
-  def get_system_status()
+  def get_system_status
     querymsg = @authmsg
 
     begin
@@ -613,8 +613,8 @@ alias :get_fmg_config :get_faz_config
   ## Method: get_task_detail (Returns Hash)
   ##
   ## Retrieves details of a task
-  ##  get_task_detail('task_id') OR
-  ##  get_task_detail('task_id', 'adom_name')   #if ADOM is not provided it defaults to root ADOM
+  ##  get_task_detail(:task_id => 'task-id') OR
+  ##  get_task_detail({:task_id => 'task-id', adom=> 'adom_name'})   #if ADOM is not provided it defaults to root ADOM
   #####################################################################################################################
   def get_task_detail(opts={})
     querymsg = @authmsg
@@ -622,7 +622,7 @@ alias :get_fmg_config :get_faz_config
     
     begin
       if opts[:task_id]
-        querymsg[:task_id] = task_id
+        querymsg[:task_id] = opts[:task_id]
       else
         raise ArgumentError.new('Must provide required arguments for method-> :task_id')
       end
@@ -742,22 +742,19 @@ alias :get_fmg_config :get_faz_config
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
 
       if opts[:start_date] && opts[:end_date]
-        startdate = DateTime.parse(opts[:start_date]).strftime("%Y-%m-%dT%H:%M:%S") rescue false
-        enddate = DateTime.parse(opts[:end_date]).strftime("%Y-%m-%dT%H:%M:%S") rescue false
+        startdate = DateTime.parse(opts[:start_date]).strftime('%Y-%m-%dT%H:%M:%S') rescue false
+        enddate = DateTime.parse(opts[:end_date]).strftime('%Y-%m-%dT%H:%M:%S') rescue false
         if startdate && enddate
           if enddate > startdate
             querymsg[:start_date] = startdate
             querymsg[:end_date] = enddate
           else
-            puts 'End_date provided comes before the start_date provided, executing without date filter'
+            puts 'End_date provided comes before the start_date provided, executing without date filter.'
           end
         else
-          puts 'Invalid date formats provided, executing without date filter'
+          puts 'Invalid date formats provided, executing without date filter.'
         end
       end
-    else
-      querymsg[:adom] = 'root'
-    end
 
     begin
       exec_soap_query(:list_faz_generated_reports,querymsg,:list_faz_generated_reports_response,:report_list)
@@ -768,7 +765,7 @@ alias :get_fmg_config :get_faz_config
   end
 
   #####################################################################################################################
-  ## Method: list_revision_id
+  ## Method: list_revision_id   (Returns: Nori::StringWithAttributes) string contains revision ID requested
   ##
   ## Retrieves revision IDs associated with a particular device and optionally revisions with specific name
   ##  list_revision_id(:serial_number => 'serial_number') OR
@@ -931,21 +928,6 @@ alias :get_fmg_config :get_faz_config
 
 ##############################
 ##############################
-
-
-  ###############################################################################################
-  ## Method: TESTING
-  ###############################################################################################
-  def test
-    querymsg = @authmsg
-    querymsg[:adom] = 'root'    ### Defaults to
-    #querymsg[:detail] = 2
-    puts querymsg
-    data = @client.call(:get_device_list, message: querymsg).to_hash
-    puts '######## Test Method Result#####'
-    puts data
-    puts ''
-  end
 
   ###############################################################################################
   ## Method: exec_soap_query
