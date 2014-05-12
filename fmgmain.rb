@@ -2,6 +2,8 @@ require_relative 'fmgapi'
 require_relative 'ah2hh'
 require 'trollop'
 require 'base64'
+require 'nori'
+require "nokogiri"
 
 #######################################
 ###### Options Handling ###############
@@ -35,6 +37,8 @@ fmgapi = FmgApi.new(opts[:wsdl_file], opts[:fmg_api_url], opts[:namespace], opts
 fazapi = FmgApi.new(opts[:wsdl_file], 'https://10.0.1.15:8080', opts[:namespace], opts[:login], opts[:passwd])
 
 ################################################################################################################
+
+
 #myresult = fmgapi.get_adom_by_name(:adom => 'customerA')
 #myresult = fmgapi.get_adom_by_oid(:adom => '152')
 #myresult = fazapi.get_adom_list
@@ -59,26 +63,44 @@ fazapi = FmgApi.new(opts[:wsdl_file], 'https://10.0.1.15:8080', opts[:namespace]
 #myresult = fmgapi.get_system_status()
 #myresult = fmgapi.get_task_detail('186', 'customerA')
 #myresult = fmgapi.import_policy({:adom_name => 'root', :dev_name => 'MSSP-1', :vdom_name => 'root'})
-#myresult = fmgapi.install_config({:adom => 'root', :pkgoid => '572', :dev_id => '234', :rev_name => 'API Install'})
-myresult = fazapi.list_faz_generated_reports({:start_date => '20140401', :end_date => '20140101'})
+#myresult = fmgapi.install_config({:adom => 'root', :pkgoid => '572'})
+#myresult = fazapi.list_faz_generated_reports({:start_date => '20140401', :end_date => '20140101'})
+#myresult = fazapi.list_faz_generated_reports({:start_date => '20140401', :end_date => '20140101'})
 #myresult = fmgapi.list_revision_id({:dev_id => '234', :rev_name => 'API Install'})
 #myresult = fazapi.remove_faz_archive({:adom => 'root', :dev_id => 'FWF60D4613000043', :file_name => '1712625326:0', :type => '6'})
-#myresult = fmgapi.retrieve_config({:dev_id => '234', :rev_name => 'API-Retrieve'})
+myresult = fmgapi.retrieve_config({:dev_id => '234', :rev_name => 'API-Retrieve'})
 #myresult = fmgapi.revert_config({:rev_id => '4', :dev_id => '234'})
 #myresult = fazapi.run_faz_report({:report_template => 'Admin and System Events Report'})
+#myresult = fmgapi.run_script({:name => 'cli-sys-status', :serial_number => 'FGVM020000018110'})
+#myresult = fazapi.search_faz_log(:device_name => 'FWF60D', :search_criteria => 'vd=root srcip=192.168.1.12 or srcip=192.168.19.2')
+#myresult = fazapi.set_faz_config(:config => "config system dns \n set secondary 166.102.165.11 \n end \n")
 
 
 ####################################################################################################################
 #puts '### DATE TIME STUFF ###'
 #testtime = DateTime.parse('04042014 01:10:30').strftime("%Y-%m-%dT%H:%M:%S").to_s rescue false
 #puts testtime
-
-
 #puts DateTime.strptime('2014-04-25T00:00:00', '%Y--%m--%d')
+
+
+
+
+#### The following can be used to format config files that lost formatting due to SAVON processing
+#### may still  need some additional work but this fixes most of the issues.
+#myresult = myresult.gsub(/\s{2,}/,"\n")
+#myresult = myresult.gsub(/([0-9a-zA-Z])(end)/, "\\1 \n\\2\n")
+#myresult = myresult.gsub(/(end)([0-9a-zA-Z])/, "\\1 \n\\2\n")
+#myresult = myresult.gsub(/([0-9])(config)/, "\\1\n\\2")
+####
+#myfile = File.open('c:\Users\nick\Desktop\apiconfig.conf', "w+")
+#myfile.write(myresult)
+#myfile.close
 
 puts myresult.class
 puts myresult
 
+
+#### the following can be used to write an archive file to a file
 #myfile = File.open('c:\Users\nick\Desktop\archive.pcap', "w+")
 #myfile.write(Base64.decode64(myresult[:data]))
 #myfile.close

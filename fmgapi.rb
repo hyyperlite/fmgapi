@@ -16,6 +16,14 @@ require 'time'
 ### Usage example:
 ###  fmg1 = FmgApi.new('wsdl_file_location', 'url', 'namespace', 'userid', 'passwd')
 ###  result = fmg1.get_adom_list
+###
+### In most cases if not all, arguments to the method are passed in as hash key => value instead of traditional
+### arugments passed in order.   This is because many methods many optional arguments and even required arguments
+### can be left out if other required arguments are used.
+### when specifying hash valudes to a method, use the following syntax:
+###
+### Single argument passed:    method_name(argument_key => 'argument_value')
+### Multiple arguments passed: method_name({argument1_key => 'argument1_value', argument2_key => 'agrument2_value'})
 ######################################################################################################################
 
 class FmgApi
@@ -70,11 +78,16 @@ class FmgApi
 
 
 
+
+
+
   ################################################################################################
   ## Method: get_adom_by_name (Returns Hash)
   ##
   ## Retreives ADOM info for a specified ADOM name and returns a hash of  attributes
-  ##  get_adom_by_name() OR  [Note: If no parameter is passed defaults to 'root']
+  ##
+  ## Usage:
+  ##  get_adom_by_name() OR  # Note: If no parameter is passed defaults to 'root'
   ##  get_adom_by_name(:adom => 'adom_name')
   ################################################################################################
   def get_adom_by_name(opts = {})
@@ -93,8 +106,9 @@ class FmgApi
   ## Method: get_adom_by_oid  (Returns Hash)
   ##
   ## Retrieves VDOM info for a specified VDOM ID and returns a hash of VDOM attributes
-  ##  get_adom_by_oid() OR  [Note:  if no parameter is passed, defaults to OID=3 (should be root)]
-  ##  get_adom_by_oid(:adom_id => 'adom_oid')  ##  if no parameter is passed defaults to OID=3
+  ## Usage:
+  ##  get_adom_by_oid() OR  # If no parameter is passed, defaults to OID=3 (which should be root adom)]
+  ##  get_adom_by_oid(:adom_id => 'adom_oid')
   #############################################################################################
   def get_adom_by_oid(opts = {})
     querymsg = @authmsg
@@ -112,6 +126,8 @@ class FmgApi
   ## Method: get_adom_list  (Returns Array of Hashes  (unless not in ADOM mode then potentially just Hash))
   ##
   ## Returns ADOM details as hash of hashes with top key based on OID
+  ##
+  ## Usage:
   ##  get_adom_list()
   #####################################################################
   def get_adom_list
@@ -129,12 +145,12 @@ class FmgApi
   ## Method: get_config  (Returns Hash)
   ##
   ## Retrieves a specific configuration revision
-  ## Must supply arguments in the form of ONE of the following:
-  ##  get_config({:revision_number => 'rev#', :serial_number => 'XXXXXXXXXX'}) OR
-  ##  get_config({:revision_number => 'rev#', :dev_id => 'XXX'})
-  ## Optionally MAY also include an ADOM specification such as:
-  ##  get_config({:revision_number => 'rev#', :serial_number => 'XXXXXXXX', :adom => 'XXX') OR
-  ##  get_config({:revision_number => 'rev#', :dev_id => 'XXX', :adom => 'XXX'})
+  ##
+  ## Usage:
+  ##  get_config({:revision_number => 'rev-number', :serial_number => 'serial-number'}) OR
+  ##  get_config({:revision_number => 'rev-number', :dev_id => 'device-id'})
+  ## Optional arguments:
+  ##  :adom   #ADOM name.  Defaults to root if not supplied
   #####################################################################################################################
   def get_config (opts={})
     querymsg = @authmsg
@@ -161,14 +177,16 @@ class FmgApi
   ## Method: get_config_revision_history  (Returns Hash or Array of Hashes)
   ##
   ## Retrieves list of configurations from Revision History
-  ## Must supply arguments in the form of ONE of the following:
-  ##  get_config_revision_history(:serial_number => 'XXX')  OR
-  ##  get_config_revision_history(:dev_id => 'XXX')  OR
-  ## Additional Options can be used to filter including:
-  ##  :checkin_user,
-  ##  :min_checkin_date and/or :max_checking_date,  [NOTE: if min/max are both passed and max occurs before min then no date filter will be used]
-  ##  :min_revision_number and/or :max_revision_number  [NOTE: if min/max are both passed and min > max then no revision number filter will be used]
   ##
+  ## Usage:
+  ##  get_config_revision_history(:serial_number => 'serial-number')  OR
+  ##  get_config_revision_history(:dev_id => 'device-id)
+  ## Optional arguments:
+  ##  :checkin_user
+  ##  :min_checkin_date
+  ##  :max_checkin_date,  #if min and max are both passed and max occurs before min then no date filter will be used
+  ##  :min_revision_number
+  ##  :max_revision_number  #if min and max are both passed and min > max then no revision number filter will be used
   #####################################################################################################################
   def get_config_revision_history (opts={})
     querymsg = @authmsg
@@ -186,10 +204,10 @@ class FmgApi
           querymsg[:min_checkin_date] = date_min_checkin
           querymsg[:max_checkin_date] = date_max_checkin
         else
-          puts ':max_checkin_date provided comes before the :min_checkin_date provided, executing without min/max checkin-date filter'
+          puts __method__.to_s  + ': :max_checkin_date provided comes before the :min_checkin_date provided, executing without min/max checkin-date filter'
         end
       else
-        puts 'Invalid date formats provided in attributes :max_checkin_date or :min_checkin_date, executing without min/max checkin-date filter'
+        puts __method__.to_s  + ': Invalid date formats provided in attributes :max_checkin_date or :min_checkin_date, executing without min/max checkin-date filter'
       end
     elsif opts[:min_checkin_date]
       date_min_checkin = DateTime.parse(opts[:min_checkin_date]).strftime('%Y-%m-%dT%H:%M:%S') rescue false
@@ -206,7 +224,7 @@ class FmgApi
         querymsg[:min_revision_number] = opts[:min_revision_number]
         querymsg[:max_revision_number] = opts[:max_revision_number]
       else
-        puts ':max_revision_number provided is less than :min_revision_number provided.  Executing without min/max revision number filter'
+        puts __method__.to_s  + ':max_revision_number provided is less than :min_revision_number provided.  Executing without min/max revision number filter'
       end
     elsif opts[:min_revision_number] then querymsg[:min_revision_number] = opts[:min_revision_number]
     elsif opts[:max_revision_number] then querymsg[:max_revision_number] = opts[:max_revision_number]
@@ -221,9 +239,7 @@ class FmgApi
       else
         raise ArgumentError.new('Must provide arguments for method get_config_revision_history-> :serial_number OR :dev_id')
       end
-
       exec_soap_query(:get_config_revision_history,querymsg,:get_config_revision_history_response,:return)
-
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -234,9 +250,10 @@ class FmgApi
   ## Method: get_device (Returns Hash)
   ##
   ## Retrieves a list of vdoms or with arguments a vdom for a specific device id or device name.
-  ## Must supply arguments in the form of ONE of the following:
-  ##  get_device(:serial_number => 'XXX')  OR
-  ##  get_device(:dev_id => 'XXX')
+  ##
+  ## Usage:
+  ##  get_device(:serial_number => 'serial-number')  OR
+  ##  get_device(:dev_id => 'device-id')
   #####################################################################################################################
   def get_device (opts={})
     querymsg = @authmsg
@@ -260,10 +277,10 @@ class FmgApi
   #####################################################################################################################
   ## Method: get_device_license_list  (Returns Hash or Array of Hashes)
   ##
-  ## Retrieves a list of vdoms or with arguments a vdom for a specific device id or device name.
+  ## Retrieves a license info for managed devices
+  ##
   ## Usage:
   ##  get_device_license_list()
-  ##
   #####################################################################################################################
   def get_device_license_list
     querymsg = @authmsg
@@ -279,10 +296,12 @@ class FmgApi
   #####################################################################################################################
   ## Method: get_device_list (Returns Hash or Array of Hashes)
   ##
-  ## Retrieves a list of managed devices from FMG, returns hash of hashes with primary key based on serial number
-  ## Optionally takes parameter to specify ADOM to pull devices from, if not provided defaults to root ADOM
-  ##  get_device_list() OR  [Note:  if no arguments are passed defaults to retreiving device list from root ADOM]
-  ##  get_device_list(:adom => 'adom_name')
+  ## Retrieves a list of managed devices from FMG, returns hash, or hash of hashes with primary key or
+  ## on serial_number.
+  ##
+  ## Usage:
+  ##  get_device_list() OR  #if no arguments are passed defaults to root ADOM
+  ##  get_device_list(:adom => 'adom-name')
   #####################################################################################################################
   def get_device_list (opts={})
     querymsg = @authmsg
@@ -301,9 +320,10 @@ class FmgApi
   ## Method: get_device_vdom_list (Returns Hash or Array of Hashes)
   ##
   ## Retrieves a list of vdoms or with arguments a vdom for a specific device id or device name.
-  ## Must supply arguments in the form of ONE of the following:
-  ##  get_device_vdom_list(:dev_name => 'XXX')  OR
-  ##  get_device_vdom_list(:dev_id => 'XXX')
+  ##
+  ## Usage:
+  ##  get_device_vdom_list(:dev_name => 'device-name')  OR
+  ##  get_device_vdom_list(:dev_id => 'device-id')
   #####################################################################################################################
   def get_device_vdom_list (opts={})
     querymsg = @authmsg
@@ -325,11 +345,11 @@ class FmgApi
 
   #####################################################################################################################
   ## Method: get_faz_archive
-  ## retrieves specified archive file.  (File name is required and can be retrieved from associated FAZ log
+  ## Retrieves specified archive file.  (File name is required and can be retrieved from associated FAZ log
   ## incident serial number)
   ##
-  ## Must include arguments adom, dev_id, file_name & type as in following example:
-  ##  get_faz_archive({:adom => 'adom_name', :dev_id => 'serial_number', :file_name => 'filename', :type => 'type'})
+  ## Usage:
+  ##  get_faz_archive({:adom => 'adom-name', :dev_id => 'serial-number', :file_name => 'filename', :type => 'type'})
   ##
   ## Please note that in most cases dev_id means dev_id but for this query you must supply the serial number as
   ## the dev_id.
@@ -363,36 +383,52 @@ class FmgApi
   end
 
   #####################################################################################################################
-  ## Method: get_faz_config  (Returns Nori::StringWithAttributes)   resulting string containing config
-  ##   aliased also as get_fmg_config
+  ## Method: get_faz_config  (Returns Nori::StringWithAttributes)   resulting string contains config
+  ## Retrieves configuration of FortiAnalyzer or FortiAnalyzer.
   ##
-  ##  Retrieves configuration in Nori::StringWithAttributes format from FortiManager OR FortiAnalyzer device
+  ## Note:
+  ##
+  ## This class uses the SAVON GEM for SOAP/XML processing.  There is a bug in SAVON where it removes some of
+  ## the whitespace charactiers including \n from the body elements of the request upon processing.   This causes
+  ## the config file returned in this query to be mal-formatted.  I have submitted a bug report to the SAVON team
+  ## via GITHUB.  They have responded that this will be fixed.  You can see the bug submission at:
+  ## https://github.com/savonrb/savon/issues/574#issuecomment-42635095.   In the mean time, I have added some regex
+  ## processing code to resolve the returned query so it is at least usable, however this has only been limitedly
+  ## tested on a few configurations.
+  ##
+  ## Usage:
+  ##  get_faz_config()
   #####################################################################################################################
   def get_faz_config
     querymsg = @authmsg
 
     begin
-      exec_soap_query(:get_faz_config,querymsg,:get_faz_config_response,:config)
+      result = exec_soap_query(:get_faz_config,querymsg,:get_faz_config_response,:config)
+      # The following code is hopefully temporary.  Returned results from SAVON have much of whitespace especially
+      # \n removed which causes the returned config to not work on FAZ/FMG if applied.  Please see notes in method
+      # documentation above.
+      result = result.gsub(/\s{2,}/,"\n")
+      result = result.gsub(/([0-9a-zA-Z])(end)/, "\\1 \n\\2\n")
+      result = result.gsub(/(end)([0-9a-zA-Z])/, "\\1 \n\\2\n")
+      result = result.gsub(/([0-9])(config)/, "\\1\n\\2")
+      return result
     rescue Exception => e
       fmg_rescue(e)
       return e
     end
   end
-alias :get_fmg_config :get_faz_config
+  alias :get_fmg_config :get_faz_config
 
   #####################################################################################################################
   ## Method: get_faz_generated_report
   ##
   ##                      **************** Not Working ************************
   ##
-  ##
-  ## Must include arguments adom, dev_id, file_name & type as in following example:
+  ## Usage:
   ##  get_faz_generated_report({:adom => 'adom_name', :dev_id => 'device_id, :file_name => 'filename', :type => 'type'})
-  ##
   #####################################################################################################################
   def get_faz_generated_report (opts={})
     querymsg = @authmsg
-
     querymsg[:adom] = 'root'
     querymsg[:report_date] = '2014-04-25T14:36:05+00:00'
     querymsg[:report_name] = 'S-10002_t10002-Bandwidth and Applications Report-2014-04-25-0936'
@@ -421,6 +457,8 @@ alias :get_fmg_config :get_faz_config
   ##
   ## Retrieves list of groups from FMG/FAZ.  Optionally can specify an ADOM in the passed arguments.  If no ADOM
   ## is specified then it will default to root ADOM.
+  ##
+  ## Usage:
   ##  get_group_list() OR
   ##  get_group_list (:adom => 'adom_name')
   #####################################################################################################################
@@ -440,14 +478,14 @@ alias :get_fmg_config :get_faz_config
   #####################################################################################################################
   ## Method: get_groups (Returns Hash or Array of Hashes)
   ##
+  ## Retrieves list of groups from FMG/FAZ.  Must specify either 'name' of group or 'group_id'.
   ##
-  ## Retrieves list of groups from FMG/FAZ.  Must specify either 'name' of group or 'group_id'.  Optionally can specify
-  ## an ADOM.  If no ADOM is specified then it will default to root ADOM.
+  ## Usage:
   ##  get_group(:name => 'group_name')  OR
-  ##  get_group(:groupid => 'group_id') OR
-  ## Optionally specify an ADOM as well
-  ##  get_group({:name => 'group_name', :adom => 'adom_name'}) OR
-  ##  get_group({:grp_id => 'group_id', :adom => 'adom_name'})
+  ##  get_group(:groupid => 'group_id')
+  ##
+  ## Optional Arguments:
+  ##  :adom => 'adom_name'
   #####################################################################################################################
   def get_group(opts={})
     querymsg = @authmsg
@@ -471,10 +509,13 @@ alias :get_fmg_config :get_faz_config
   ## Method: get_instlog (Returns Hash or Array of Hashes)
   ##
   ## Retrieves installation logs for specified device
+  ##
+  ## Usage:
   ##  get_instlog(:dev_id => 'device_id')  OR
-  ##  get_group(:serial_number=> 'serial_number') OR
-  ##  get_group({:dev_id => 'device_id', :task_id => 'task_id'}) OR
-  ##  get_group({:serial_number => 'serial_number', :task_id => 'task_id'})
+  ##  get_group(:serial_number=> 'serial_number')
+  ##
+  ## Optional agruments:
+  ##  :task_id
   #####################################################################################################################
   def get_instlog(opts={})
     querymsg = @authmsg
@@ -498,8 +539,12 @@ alias :get_fmg_config :get_faz_config
   ## Method: get_package_list (Returns Hash or Array of Hashes)
   ##
   ## Retrieves policy package list.  Option to specify an ADOM or it defaults to root ADOM.
-  ##  get_package_list()  OR
-  ##  get_package_list('adom_name')
+  ##
+  ## Usage:
+  ##  get_package_list()
+  ##
+  ## Optional arguments:
+  ##  :adom
   #####################################################################################################################
   def get_package_list(opts={})
     querymsg = @authmsg
@@ -517,6 +562,8 @@ alias :get_fmg_config :get_faz_config
   ## Method: get_script (Returns Hash)
   ##
   ## Retrieves script details.
+  ##
+  ## Usage:
   ##  get_script(:script_name => 'script_name')
   #####################################################################################################################
   def get_script(opts={})
@@ -540,6 +587,8 @@ alias :get_fmg_config :get_faz_config
   ## Method: get_script_log (Returns Hash)
   ##
   ## Retrieves script log
+  ##
+  ## Usage:
   ##  get_script_log({:script_name => 'script_name', :dev_id => 'device_id'}) OR
   ##  get script_log({:script_name => 'script_name, :serial_number => 'serial_number})
   #####################################################################################################################
@@ -563,13 +612,16 @@ alias :get_fmg_config :get_faz_config
   end
 
   #####################################################################################################################
-  ## Method: get_script_log_summary (Returns Hash )
+  ## Method: get_script_log_summary (Returns Hash)
   ##
   ## Retrieves summary of executed scripts for a specific device
+  ##
+  ## Usage:
   ##  get_script_log_summary(:dev_id => 'device_id') OR
-  ##  get script_log_summary(:serial_number => 'serial_number) OR
-  ##  get_script_log_summary({:dev_id => 'device_id', max_logs => '#'}) OR
-  ##  get_script_log_summary({:serial_number => 'serial_number', max_logs => '#'})
+  ##  get script_log_summary(:serial_number => 'serial_number)
+  ##
+  ## Optional arguments:
+  ##  :max_logs  # defaults to 1000
   #####################################################################################################################
   def get_script_log_summary(opts={})
     querymsg = @authmsg
@@ -595,7 +647,9 @@ alias :get_fmg_config :get_faz_config
   #####################################################################################################################
   ## Method: get_system_status (Returns Hash)
   ##
-  ## Retrieves summary of executed scripts for a specific device.  If adom is not provided it defaults to root ADOM
+  ## Retrieves system status as has containing system variables and values.
+  ##
+  ## Usage:
   ##  get_system_status()
   #####################################################################################################################
   def get_system_status
@@ -613,6 +667,8 @@ alias :get_fmg_config :get_faz_config
   ## Method: get_task_detail (Returns Hash)
   ##
   ## Retrieves details of a task
+  ##
+  ## Usage:
   ##  get_task_detail(:task_id => 'task-id') OR
   ##  get_task_detail({:task_id => 'task-id', adom=> 'adom_name'})   #if ADOM is not provided it defaults to root ADOM
   #####################################################################################################################
@@ -621,7 +677,7 @@ alias :get_fmg_config :get_faz_config
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
     
     begin
-      if opts[:task_id]
+      if opts[:task_id] then
         querymsg[:task_id] = opts[:task_id]
       else
         raise ArgumentError.new('Must provide required arguments for method-> :task_id')
@@ -636,10 +692,11 @@ alias :get_fmg_config :get_faz_config
   #####################################################################################################################
   ## Method: import_policy (Returns Nori::StringWithAttributes) returned string contains details of import if success
   ##
-  ## Must provide following arguments  (:adom_name OR :adom_id) AND (:dev_name OR :dev_id) AND (:vdom_name OR :vdom_id)
-  ##  Examples:
-  ##   import_policy({:adom_name => 'root', :dev_name => 'MSSP-1', :vdom_name => 'root'})
-  ##   import_policy({:adom_id => '3', :dev_id => '234', :vdom_id => '3'})
+  ## Imports a policy from managed device to FMG current config DB for that device.
+  ##
+  ##  Usage:
+  ##   import_policy({:adom_name => 'root', :dev_name => 'MSSP-1', :vdom_name => 'root'}) OR
+  ##   import_policy({:adom_id => '3', :dev_id => '234', :vdom_id => '3'}) OR
   ##   import_policy({:adom_name => 'root', :dev_id => '234', :vdom_name => 'root'})
   #####################################################################################################################
   def import_policy(opts={})
@@ -692,11 +749,15 @@ alias :get_fmg_config :get_faz_config
   ## Installs a policy package to specified device.
   ##  Note that there is no argument validation in this method as there is in most other methods of this class.
   ##
-  ## Required arguments:   :adom AND :pkgoid AND (:dev_id OR :serial_number)
-  ## Optional arguments:  :rev_name, :validate
+  ## Required arguments:
   ##
-  ## Example:
-  ##  install_config({:adom => 'root', :pkgoid => '572', :dev_id => '234', :rev_name => 'API Install'}
+  ## Usage:
+  ##  install_config({:adom => 'root', :pkgoid => '572', :dev_id => '234'})
+  ##
+  ## Optional Arguments:
+  ##  :rev_name    # revision name of package revision to install.  If not specified installs most recent rev
+  ##  :install_validate   # 0 or 1 for false or true.  If not specified defaults to no-validation.
+  ##
   #####################################################################################################################
   def install_config(opts={})
     querymsg = @authmsg
@@ -728,14 +789,16 @@ alias :get_fmg_config :get_faz_config
   ## Retrieves a list of FAZ generated reports stored on FortiAnalyzer or FortiManager.   An ADOM & start/end dates
   ## can be optionally specified as a arguments.  If an ADOM is not specified as a parameter this method will default
   ## to retrieving a report list from the root ADOM. If start time is provided you must also pass end time and
-  ## vice-versa.
+  ## vice-versa.  Various time formats are supported including with/without dashes and with/without time. If
+  ## date/time arguments are provided but format is not valid then will still run with out date/time filtering.
   ##
-  ##   list_faz_generated_reports() OR
-  ##   list_faz_generated_reports(:adom => 'adom_name') OR
-  ##   list_faz_generated_reports({:start_time => '2014-01-01T00:00:00', :end_time => '2014-04-01T00:00:00'}) OR
-  ##   list_faz_generated_reports({:adom => 'adom_name', :start_time => '20140101', :end_time => '20140401'})
+  ## Usage:
+  ##   list_faz_generated_reports()
   ##
-  ##  Various time formats are supported including with/without dashes and with/without time ##
+  ## Optional Arguments:
+  ##  :adom        # containing adom-name
+  ##  :start_time  # => '2014-01-01T00:00:00'    earliest report time
+  ##  :end_time    # => '2014-04-01T00:00:00'    latest report time
   #####################################################################################################################
   def list_faz_generated_reports(opts={})
     querymsg = @authmsg
@@ -749,10 +812,10 @@ alias :get_fmg_config :get_faz_config
             querymsg[:start_date] = startdate
             querymsg[:end_date] = enddate
           else
-            puts 'End_date provided comes before the start_date provided, executing without date filter.'
+            puts __method__.to_s + ': End_date provided comes before the start_date provided, executing without date filter.'
           end
         else
-          puts 'Invalid date formats provided, executing without date filter.'
+          puts __method__.to_s  + ': Invalid date formats provided, executing without date filter.'
         end
       end
 
@@ -768,10 +831,13 @@ alias :get_fmg_config :get_faz_config
   ## Method: list_revision_id   (Returns: Nori::StringWithAttributes) string contains revision ID requested
   ##
   ## Retrieves revision IDs associated with a particular device and optionally revisions with specific name
+  ##
+  ## Usage:
   ##  list_revision_id(:serial_number => 'serial_number') OR
-  ##  list_revision_id(:dev_id => 'device_id') OR
-  ##  list_revision_id({:serial_number => 'serial_number', rev_name => 'revision_name') OR
-  ##  list_revision_id({:dev_id => 'device_id', rev_name => 'revision_name')
+  ##  list_revision_id(:dev_id => 'device_id')
+  ##
+  ## Optional Arguments:
+  ##  rev_name   # Name of revision to get ID for, if not specified retrieves current revision
   #####################################################################################################################
   def list_revision_id(opts={})
     querymsg = @authmsg
@@ -799,13 +865,15 @@ alias :get_fmg_config :get_faz_config
   ## Removes specified archive file.  (Filename is required and can be retrieved from associated FAZ log
   ## incident serial number)
   ##
-  ## Must include arguments adom, dev_id, file_name & type as in following example:
+  ## Usage:
   ##  get_faz_archive({:adom => 'adom_name', :dev_id => 'serial_number', :file_name => 'filename', :type => 'type'})
   ##
   ## Please note that in most cases dev_id means dev_id but for this query you must supply the serial number as
   ## the dev_id.
   ##
   ## Types are as follows:   1-Web, 2-Email, 3-FTP, 4-IM, 5-Quarantine, 6-IPS
+  ##
+  ## Filename must be known and can be found in the associated log file
   ##
   ## Also note, that although the WSDL claims that this query supports tar and gzip compression options I have not
   ## been able to get either of those to work.  if you specify tar the file is sent without compression (same as if
@@ -838,17 +906,18 @@ alias :get_fmg_config :get_faz_config
   end
 
   #####################################################################################################################
-  ## Method: retrieve_config  (Returns: Nori::StringWithAttributes)   string returned will contain the
+  ## Method: retrieve_config  (Returns: Nori::StringWithAttributes)   String returned will contain the
   ##  FortiManager task ID of the request.  Status of the request can be found by retrieving and analyzing the task
   ##  by ID.
   ##
-  ## Retrieves configuration from managed device to FortiManager
+  ## Retrieves configuration from managed device to FortiManager DB
+  ##
+  ## Usage:
   ##  retrieve_config(:serial_number => 'XXXXXXXXXXXXX') OR
-  ##  retrieve_config(:dev_id => 'XXX') OR
-  ##  retrieve_config({:serial_number => 'XXXXXXXXXXX', :rev_name => 'name'}) OR
-  ##  retrieve_config({:dev_id => 'XXX', :rev_name => 'name'})
-  ##   NOTE: when providing a :rev_name do not use spaces in the revision name as the FMG will interpret this as
-  ##     multiple name entries and will fail because the number of names does not match number of devices.
+  ##  retrieve_config(:dev_id => 'XXX')
+  ##
+  ## Optional Arguments:
+  ##  :rev_name   # Name to give to revision when saved to DB.  If not specified will be default naming.
   #####################################################################################################################
   def retrieve_config(opts={})
     querymsg = @authmsg
@@ -926,14 +995,115 @@ alias :get_fmg_config :get_faz_config
     end
   end
 
+  #####################################################################################################################
+  ## Method: run_script  (Returns: Nori::StringWithAttributes)  returned value is task ID for script process
+  ##
+  ## Usages:
+  ##  run_script({:name => 'name-of-script', :serial_number => 'XXXXXXXXXXXXX'})
+  ## Optionally can specify the following arguments:
+  ##  :is_global  (values: true or false) [default = false],
+  ##  :run_on_db  (values: true or false) [default = false],
+  ##  :type (values CLI or TCL) [default = CLI]
+  #####################################################################################################################
+  def run_script(opts={})
+    querymsg = @authmsg
+    querymsg[:is_global] = opts[:is_global] ? opts[:is_global] : 'false'
+    querymsg[:run_on_dB] = opts[:run_on_db] ? opts[:run_on_db] : 'false'
+    querymsg[:type] = opts[:type] ? opts[:type] : 'CLI'
+
+
+    begin
+      if opts[:name] && opts[:serial_number]
+        querymsg[:name] = opts[:name]
+        querymsg[:serial_number] = opts[:serial_number]
+      else
+        raise ArgumentError.new('Must provide required arguments for method-> :name AND :serial_number')
+      end
+      exec_soap_query(:run_script,querymsg,:run_script_response,:task_id)
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+
+  #####################################################################################################################
+  ## Method: search_faz_log  (Returns: Hash (for single log) or Array of Hashes (for multiple logs))
+  ##
+  ## Usage:
+  ##  search_faz_log({:device_name => 'name-of-device', :search_criteria => 'srcp=x.x.x.x and XXXXX'})
+  ##
+  ## Optionally can specify the following arguments:
+  ##  :adom (values 'adom-names') [default => root]
+  ##  :check_archive (values: 0, 1?) [default = 0]
+  ##  :compression (values: tar, gzip) [default = tar]
+  ##  :content  (values:  logs, XXX, XXX) [default = logs]
+  ##  :dlp_archive_type (values:  XXXX) [default: <not set>]
+  ##  :format  (values: rawFormat, XXXX) [default = rawFormat]
+  ##  :log_type  (values: traffic, event, antivirus, webfilter, intrusion, emailfilter, vulnerability, dlp, voip) [default = traffic],
+  ##  :max_num_matches  (values: 1-n) [default = 10],
+  ##  :start_index  (values: 1-n) [default = 1],
+  ##
+  #####################################################################################################################
+  def search_faz_log(opts={})
+    querymsg = @authmsg
+    querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
+    querymsg[:check_archive] = opts[:check_archive] ? opts[:check_archive] : '0'
+    querymsg[:compression] = opts[:compression] ? opts[:check_compression] : 'tar'
+    querymsg[:content] = opts[:content] ? opts[:content] : 'logs'
+    querymsg[:format] = opts[:formate] ? opts[:format] : 'rawFormat'
+    querymsg[:log_type] = opts[:log_type] ? opts[:log_type] : 'traffic'
+    querymsg[:max_num_matches] = opts[:max_num_matches] && opts[:max_num_matches] > 0 ? opts[:max_num_matches] : '10'
+    querymsg[:search_criteria] = opts[:search_criteria] ? opts[:search_criteria] : 'srcip=10.0.2.15'
+    querymsg[:start_index] = opts[:start_index] && opts[:start_index] > 1 ? opts[:start_index] : '1'
+    querymsg[:DLP_archive_type] = opts[:dlp_archive_type] if opts[:dlp_archive_type]
+
+    begin
+      if opts[:device_name]
+        querymsg[:device_name] = opts[:device_name]
+      else
+        raise ArgumentError.new('Must provide required arguments for method-> :name AND :serial_number')
+      end
+      result = exec_soap_query(:search_faz_log,querymsg,:search_faz_log_response,:logs)
+      return result[:data]
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+
+  #####################################################################################################################
+  ## Method: set_faz_config  (Returns:
+  ##
+  ## Usage:
+  ##  search_faz_log({:config =>  "configuration \n configuration \n ..."})
+  #####################################################################################################################
+  def set_faz_config(opts={})
+    querymsg = @authmsg
+    querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
+
+    begin
+      if opts[:config]
+        querymsg[:config] = opts[:config]
+      else
+        raise ArgumentError.new('Must provide required argument for method-> :config')
+      end
+      exec_soap_query(:set_faz_config,querymsg,:set_faz_config_response,:task_id)
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+  alias :set_fmg_config :set_faz_config
+
+
 ##############################
+ private
 ##############################
 
   ###############################################################################################
   ## Method: exec_soap_query
   ## executes the Savon API calls to FMG for each of the above methods (with a couple of exceptions)
   ###############################################################################################
-private
   def exec_soap_query(querytype,querymsg,responsetype,infotype)
 
     ### Make SOAP call to FMG and store result in 'data'
@@ -968,7 +1138,6 @@ private
   ## returns data without a container attribute as it does with all other queries so we must manually parse out
   ## each of the values returned specifically.
   #################################################################################################################
-  private
   def exec_soap_query_for_get_sys_status(querytype,querymsg,responsetype)
 
     ### Make SOAP call to FMG and store result in 'data'
