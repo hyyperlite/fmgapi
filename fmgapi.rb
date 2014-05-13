@@ -263,32 +263,35 @@ class FmgApi
   ##  add_policy_package({:policy_package_name => 'new-pkf-name'}, *ArrayOfHashes)
   ##   Optional *ArrayOfHashes 2nd argument contains install target definitions.  See Optional_Arguments(ARG2-ArrayOfHashes) below:
   ##
-  ## +Optional_Arguments(ARG1-Hash):+
-  ##  :adom                 # defaults to root if not passed
-  ##  :is_global            # 0=create local package, 1=create global package.  defaults to 0.  If set to 1, ignores the :adom setting and assigns in global ADOM
+  ## Optional_Arguments(ARG1-Hash):
+  ##  :adom                  # defaults to root if not passed
+  ##  :is_global             # 0=create local package, 1=create global package.  defaults to 0.  If set to 1, ignores the :adom setting and assigns in global ADOM
   ##  :fg_is_not_vdom_mode  # 0=all fortigates referenced are in vdom mode, 1 = one or more of FGs is not in vdom mode
   ##                        # default is 0.  This is a protection mechanism in this method to "help" prevent adding a "device" to a policy package
   ##                        # instead of a vdom to a policy package as the FMG will let you do this.   In order to add a "device" to an install
   ##                        # target instead of a vdom to an install target you must set this to 1.  However, if you do set this to one, if you
   ##                        # are adding multiple devices in this single call then it will not prevent adding "devices" vs. "vdoms" to policy package
-  ##                        # for any of the devices referenced in this call.
-  ## :rename                # rename :policy_package_name to :rename  (not set if not passed)
-  ## :clone_from            # when creating a new :policy_package_name you can clone from an existing (in same ADOM) with name specified in :clone_from
+  ##                        # for any of the devices referenced in this call. Even if the some fgs are in vdom mode.
+  ##  :rename                # rename :policy_package_name to :rename  (not set if not passed)
+  ##  :clone_from            # when creating a new :policy_package_name you can clone from an existing (in same ADOM) with name specified in :clone_from
   ##
-  ## +Optional_Arguments(ARG2-ArrayOfHashes)   (This may actually be a single hash for one install target or array of hashes for multiple)
+  ## Optional_Arguments(ARG2-ArrayOfHashes)  (This may actually be a single hash for one install target or array of hashes for multiple)
+  ##
   ## Example-1:  (adding multiple vdoms via ArrayOfHashes to package install targets)
   ##  myinstalltargets = Array.new
   ##  myinstalltargets[0] = {:dev => {:name => 'MSSP-1', :vdom => {:name => 'root'}}}
   ##  myinstalltargets[1] = {:dev => {:name => 'MSSP-1', :vdom => {:name => 'transparent'}}
-  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, myinstalltargets})
+  ##  add_policy_package({:policy_package_name => 'pkg-name'}, myinstalltargets})
   ## Example-2:  (adding single vdom via Hash to package install targets)
-  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, {:dev => {:name => 'MSSP-1', :vdom =>{:name => 'root'}}) OR
-  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, {:dev => {:name => 'MSSP-1', :vdom =>{:oid => '3'}}} OR
-  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, {:dev => {:oid => '123', :vdom => {:name => 'root'}}) OR
-  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, {:dev => {:oid => '123', :vdom => {:oid => '3'}})
+  ##  add_policy_package({:policy_package_name => 'pkg-name'}, {:dev => {:name => 'MSSP-1', :vdom =>{:name => 'root'}}) OR
+  ##  add_policy_package({:policy_package_name => 'pkg-name'}, {:dev => {:name => 'MSSP-1', :vdom =>{:oid => '3'}}} OR
+  ##  add_policy_package({:policy_package_name => 'pkg-name'}, {:dev => {:oid => '123', :vdom => {:name => 'root'}}) OR
+  ##  add_policy_package({:policy_package_name => 'pkg-name'}, {:dev => {:oid => '123', :vdom => {:oid => '3'}})
+  ##  add_policy_package({:policy_package_name => 'pkg-name', :fg_is_not_vdom_mode => '1'}), {:dev => {:name => 'MSSP-1'})
+  ##  add_policy_package({:policy_package_name => 'pkg-name', :fg_is_not_vdom_mode => '1'}), {:dev => {:oid => '123'})
   ## Example-3: (adding a group to package install targets)
-  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, {:grp => {:name => 'grp-name'}) OR
-  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, {:grp => {:oid => 'grp-oid'})
+  ##  add_policy_package({:policy_package_name => 'pkg-name'}, {:grp => {:name => 'grp-name'}) OR
+  ##  add_policy_package({:policy_package_name => 'pkg-name'}, {:grp => {:oid => 'grp-oid'})
   ################################################################################################
   def add_policy_package(opts = {}, install_targets=false)
     querymsg = @authmsg
@@ -307,7 +310,7 @@ class FmgApi
       # cannot using hash as container to pass to Savon.  We instead must convert existing hash to xml string and append
       # the repetitious attributes.  Hash to XML translation is done with Gyoku.xml() method.
       if install_targets.is_a?(Array)
-        querymsgxml = Gyoku.xml(querymsg) + "<packageInstallTarget>"
+        querymsgxml = Gyoku.xml(querymsg) + '<packageInstallTarget>'
         install_targets.each { |x|
           if x[:grp]
             if x[:grp][:oid] || x[:grp][:name]
@@ -335,7 +338,7 @@ class FmgApi
           end
         }
       elsif install_targets.is_a?(Hash)
-        querymsgxml = Gyoku.xml(querymsg) + "<packageInstallTarget>"
+        querymsgxml = Gyoku.xml(querymsg) + '<packageInstallTarget>'
         if install_targets[:grp]
           if install_targets[:grp][:oid] || install_targets[:grp][:name]
             querymsgxml += Gyoku.xml(install_targets)
@@ -364,7 +367,7 @@ class FmgApi
       end
 
       if querymsgxml
-        querymsgxml += "</packageInstallTarget>"
+        querymsgxml += '</packageInstallTarget>'
         exec_soap_query(:add_policy_package,querymsgxml,:add_policy_package_response,:policy_package_oid)
       else
         exec_soap_query(:add_policy_package,querymsg,:add_policy_package_response,:policy_package_oid)
