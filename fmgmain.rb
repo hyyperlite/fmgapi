@@ -35,10 +35,15 @@ where [options] are:
 #####################################
 fmgapi = FmgApi.new(opts[:wsdl_file], opts[:fmg_api_url], opts[:namespace], opts[:login], opts[:passwd])
 fazapi = FmgApi.new(opts[:wsdl_file], 'https://10.0.1.15:8080', opts[:namespace], opts[:login], opts[:passwd])
+fmg100c = FmgApi.new(opts[:wsdl_file], 'https://10.0.1.14:8080', opts[:namespace], opts[:login], 'c0ns3qu3nc3')
 
 ################################################################################################################
-
-
+#myresult = fmgapi.add_adom(:name => 'apitest2') ## test only add adom
+#myresult = fmgapi.add_adom({:name => 'apitest1', :serial_number => 'FGVM020000018111', :vdom_name => 'root'}) ## test adding vdom with adom using device sn
+#myresult = fmgapi.add_adom({:name => 'apitest1', :dev_id => '234', :vdom_name => 'root'}) ## test adding vdom with adom using device id
+#myresult = fmgapi.add_adom({:name => 'apitest1', :serial_number => 'FGVM020000018111', :vdom_id => '3', :mr => '1'}) ## :test for mr specified without :version
+#myresult = fmgapi.add_adom({:name => 'apitest1', :vdom_id => '3'})  #test for error when not all VDOM args specified
+myresult = fmg100c.add_device({:ip => '10.0.1.1', :password => 'c0ns3qu3nc3', :name => 'FWF60D'})
 #myresult = fmgapi.get_adom_by_name(:adom => 'customerA')
 #myresult = fmgapi.get_adom_by_oid(:adom => '152')
 #myresult = fazapi.get_adom_list
@@ -46,6 +51,7 @@ fazapi = FmgApi.new(opts[:wsdl_file], 'https://10.0.1.15:8080', opts[:namespace]
 #myresult = fmgapi.get_config_revision_history({:dev_id => '234', :min_checkin_date => '20140428', :max_checkin_date => '20140430'})
 #myresult = fmgapi.get_device(:serial_number => 'FGVM020000018110')
 #myresult = fmgapi.get_device_license_list
+#myresult = fmgapi.get_device_list
 #myresult = fazapi.get_device_list
 #myresult = fmgapi.get_device_vdom_list(:dev_id => '234')
 #myresult = fazapi.get_faz_archive({:adom => 'root', :dev_id => 'FWF60D4613000043', :file_name => '1712625325:0', :type => '6'})
@@ -68,7 +74,7 @@ fazapi = FmgApi.new(opts[:wsdl_file], 'https://10.0.1.15:8080', opts[:namespace]
 #myresult = fazapi.list_faz_generated_reports({:start_date => '20140401', :end_date => '20140101'})
 #myresult = fmgapi.list_revision_id({:dev_id => '234', :rev_name => 'API Install'})
 #myresult = fazapi.remove_faz_archive({:adom => 'root', :dev_id => 'FWF60D4613000043', :file_name => '1712625326:0', :type => '6'})
-myresult = fmgapi.retrieve_config({:dev_id => '234', :rev_name => 'API-Retrieve'})
+#myresult = fmgapi.retrieve_config({:dev_id => '234', :rev_name => 'API-Retrieve'})
 #myresult = fmgapi.revert_config({:rev_id => '4', :dev_id => '234'})
 #myresult = fazapi.run_faz_report({:report_template => 'Admin and System Events Report'})
 #myresult = fmgapi.run_script({:name => 'cli-sys-status', :serial_number => 'FGVM020000018110'})

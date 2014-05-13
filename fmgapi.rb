@@ -19,11 +19,16 @@ require 'time'
 ##  fmg1 = FmgApi.new('wsdl_file_location', 'url', 'namespace', 'userid', 'passwd')
 ##  result = fmg1.get_adom_list
 ##
-## +Note:+ Arguments to fmgapi methods are passed in as hash key => value instead of traditional
+## WSDL file should be locally accessible by the class
+## Namespace for FMG/FAZ to this point has been:  http://r200806.ws.fmg.fortinet.com/
+## URL generally is https://<fmg/faz_ip>:8080  (web service should be enabled on FMG/FAZ)
+##
+##
+## +Important:+ Arguments to fmgapi methods are passed in as hash key => value instead of traditional
 ## arguments passed in order.   This is because many methods have several optional arguments and in some cases required
 ## arguments can be left out if other required arguments are used.
 ##
-## When specifying hash values to a method, use the following syntax:
+## When specifying hash key/values arguments to a method, use the following syntax:
 ##
 ## Single argument passed:
 ##  method_name(argument_key => 'argument_value')
@@ -77,9 +82,128 @@ class FmgApi
     # strip_namespace: false    # default is to strip namespace identifiers from the response
     # convert_response_tags_to: upcase  # value is name of a proc that takes an action you've created
     )
-
     @authmsg = {:servicePass => {:userID => @userid, :password => @passwd}}
   end
+
+  ################################################################################################
+  ## add_adom Returns Hash (with FMG error_code and error_msgwhen successful) or RunTimeError (if not successful)
+  ##
+  ## Adds an ADOM to FortiManager or FortiAnalyzer.  You can also optionally add a +single+ VDOM to the new ADOM
+  ## however if you need to add multiple VDOMs to the ADOM you should create the ADOM here then add the VDOMs to
+  ## the ADOM with iterations of the edit_adom method for each VDOM that you need to add to the ADOM.
+  ##
+  ## +Usage:+
+  ##  add_adom(:name => 'new-adom-name')
+  ##
+  ## +Optional_Arguments:+
+  ##  :version            # defaults to 500 if not specified  (aka 5.0.0)
+  ##  :mr                 # defaults to 0 if not specified  (must also specify :version if you specify :mr)
+  ##  :is_backup_mode     # 0 = normal mode, 1 = backup mode.  Defaults to 0
+  ##  :vpn_management     # currently not working, only can default to Central VPN Console at this time (won't be processed in this version)
+  ##
+  ## Add VDOM with new ADOM Optional Argument Combinations:
+  ##  # None or one of the following argument combinations
+  ##  :serial_number and :vdom_name
+  ##  :serial_number and :vdom_id
+  ##  :dev_id and :vdom_name
+  ##  :dev_id and :vdom_id
+  ################################################################################################
+  def add_adom(opts = {})
+    querymsg = @authmsg
+    querymsg[:version] = opts[:version] ? opts[:version] : '500'
+    querymsg[:mr] = opts[:mr] ? opts[:mr] : '0'
+    querymsg[:is_backup_mode] = opts[:is_backup_mode] ? opts[:is_backup_mode] : '0'
+    #querymsg[:VPN_management] = opts[:vpn_management] ? opts[:vpn_management] : 'Policy & Device VPNs'
+
+    begin
+      if opts[:name]
+        querymsg[:name] = opts[:name]
+      else
+        raise ArgumentError.new('Must provide required arguments for method-> :name')
+      end
+
+      ## If the optional :mr argument is passed, for safety we require that :version is also passed.
+      if opts[:mr] && !opts[:version]
+        raise ArgumentError.new('Must provide required arguments for method-> :version must also be passed if :mr is passed')
+      end
+
+      # Process optional single VDOM to add to this ADOM
+      # if more than one VDOM/Device need to be added to this new ADOM
+      # then you should use edit_adom method to add them each individually
+      if opts[:serial_number] && opts[:vdom_name]
+        querymsg[:device_sN_vdom] = {}
+        querymsg[:device_sN_vdom]['SN'] = opts[:serial_number]
+        querymsg[:device_sN_vdom][:vdom_name] = opts[:vdom_name]
+      elsif opts[:serial_number] && opts[:vdom_id]
+        querymsg[:device_sN_vdom] = {}
+        querymsg[:device_sN_vdom]['SN'] = opts[:serial_number]
+        querymsg[:device_sN_vdom][:vdom_iD] = opts[:vdom_id]
+      elsif opts [:dev_id] && opts[:vdom_name]
+        querymsg[:device_iD_vdom] = {}
+        querymsg[:device_iD_vdom]['ID'] = opts[:dev_id]
+        querymsg[:device_iD_vdom][:vdom_name] = opts[:vdom_name]
+      elsif opts[:dev_id] && opts[:vdom_id]
+        querymsg[:device_iD_vdom] = {}
+        querymsg[:device_iD_vdom]['ID'] = opts[:dev_id]
+        querymsg[:device_iD_vdom][:vdom_iD] = opts[:vdom_id]
+      elsif opts[:serial_number] || opts[:dev_id] || opts[:vdom_name] || opts[:vdom_id]
+        raise ArgumentError.new('Must provide required arguments for method-> did not provide all required arguments for adding VDOM to new ADOM, exiting without adding VDOM or ADOM')
+      end
+      exec_soap_query(:add_adom,querymsg,:add_adom_response,:error_msg)
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+
+  ################################################################################################
+  ## add_device Returns String (string contains taskID of addDevice task, you can lookup the task to get results)
+  ## NOTE: may take several minutes for the fmg to import the device
+  ##
+  ## Causes FortiManager/FortiAnalyzer to communicate with specified Fortinet device (specified by IP) to import
+  ## as a managed device into the FMG/FAZ.  This has only been tested for adding FortiGate devices.
+  ##
+  ## +Usage:+
+  ##  add_device({:ip => 'x.x.x.x', :name => 'name-to-give'})
+  ##
+  ## +Optional_Arguments:+
+  ##  :adom         # defaults to root if not provided
+  ##  :admin_user   # defaults to admin if not provided
+  ##  :password     # defaults to '' if not provided
+  ##  :description  # not set if not provided
+  ##
+  #--
+  ## Arguments available by FMG/FAZ API but not yet implemented in this class#method  (Do not attempt to use these!)
+  ## :version
+  ## :mr
+  ## :autod
+  ## :model
+  ## :flags
+  ## :dev_id
+  ## :serial_number
+  #++
+  ################################################################################################
+  def add_device(opts = {})
+    querymsg = @authmsg
+    querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
+    querymsg[:admin_user] = opts[:admin_user] ? opts[:admin_user] : 'admin'
+    querymsg[:password] = opts[:password] ? opts[:password] : ''
+    querymsg[:description] = opts[:descriptions] if opts[:description]
+
+    begin
+      if opts[:ip] && opts[:name]
+        querymsg[:ip] = opts[:ip]
+        querymsg[:name] = opts[:name]
+      else
+        raise ArgumentError.new('Must provide required arguments for method-> :ip and :name')
+      end
+      exec_soap_query(:add_device,querymsg,:add_device_response,:task_id)
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+
 
 
   ################################################################################################
@@ -412,6 +536,7 @@ class FmgApi
 
     begin
       result = exec_soap_query(:get_faz_config,querymsg,:get_faz_config_response,:config)
+
       # The following code is hopefully temporary.  Returned results from SAVON have much of whitespace especially
       # \n removed which causes the returned config to not work on FAZ/FMG if applied.  Please see notes in method
       # documentation above.
