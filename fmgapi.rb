@@ -188,7 +188,7 @@ class FmgApi
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
     querymsg[:admin_user] = opts[:admin_user] ? opts[:admin_user] : 'admin'
     querymsg[:password] = opts[:password] ? opts[:password] : ''
-    querymsg[:description] = opts[:descriptions] if opts[:description]
+    querymsg[:description] = opts[:description] if opts[:description]
 
     begin
       if opts[:ip] && opts[:name]
@@ -204,7 +204,177 @@ class FmgApi
     end
   end
 
+  ################################################################################################
+  ## add_group Returns Hash with API error hash (if successful) or returns Object Type Error likely a RunTimeError (if
+  ## not successful)  Hash returned if successful includes keys error_code and error_message.
+  ##
+  ## Adds a new group to FMG/FAZ.  Optionally can add one device to that new group as well.  If more than one devices
+  ## needs to be added to the group or you need to add the devices later, use the edit_group_membership method.
+  ##
+  ## +Usage:+
+  ##  add_group({:name => 'new-group-name'})
+  ##
+  ## +Optional_Arguments:+
+  ##  :adom         # defaults to root if not provided
+  ##  :description  # not set if not provided
+  ##  :device_sn    # serial number of a single device to add to this new group (pass :device_sn or :device_id or neither)
+  ##  :device_id    # device id of single device to add to this new group (pass :device_sn or :device_id or neither)
+  ##  # Note: multiple groups can contain the same device(s)
+  #--
+  ##  :group_name   # specifies name of an existing group to include as a member in this new group
+  ##  :group_id     # specifies ID of an existing group to include as a member in this new groupt
+  #++
+  ################################################################################################
+  def add_group(opts = {})
+    querymsg = @authmsg
+    querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
+    querymsg[:description] = opts[:description] if opts[:description]
+    querymsg[:group_name] = opts[:group_name] if opts[:group_name]
 
+    if opts[:device_sn]
+      querymsg[:device_sN] = opts[:device_sn]
+    elsif opts[:device_id]
+      querymsg[:device_iD] = opts[:device_id]
+    end
+
+    begin
+      if opts[:name]
+        querymsg[:name] = opts[:name]
+       else
+        raise ArgumentError.new('Must provide required arguments for method-> :group_name')
+      end
+      exec_soap_query(:add_group,querymsg,:add_group_response,:error_msg)
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+
+  ################################################################################################
+  ## add_policy_package Returns NoriStringWithAttributes (string contains OID of package that operation was successfully
+  ## completed on)
+  ##
+  ## Multiple operations possible.  Create new FMG policy package, including adding installation targets. Also may
+  ## clone an existing policy package, rename an existing policy package or add installation targets to an existing
+  ## policy package.
+  ##
+  ## +Usage:+
+  ##  add_policy_package({:policy_package_name => 'new-pkg-name'}) OR
+  ##  add_policy_package({:policy_package_name => 'new-pkf-name'}, *ArrayOfHashes)
+  ##   Optional *ArrayOfHashes 2nd argument contains install target definitions.  See Optional_Arguments(ARG2-ArrayOfHashes) below:
+  ##
+  ## +Optional_Arguments(ARG1-Hash):+
+  ##  :adom                 # defaults to root if not passed
+  ##  :is_global            # 0=create local package, 1=create global package.  defaults to 0.  If set to 1, ignores the :adom setting and assigns in global ADOM
+  ##  :fg_is_not_vdom_mode  # 0=all fortigates referenced are in vdom mode, 1 = one or more of FGs is not in vdom mode
+  ##                        # default is 0.  This is a protection mechanism in this method to "help" prevent adding a "device" to a policy package
+  ##                        # instead of a vdom to a policy package as the FMG will let you do this.   In order to add a "device" to an install
+  ##                        # target instead of a vdom to an install target you must set this to 1.  However, if you do set this to one, if you
+  ##                        # are adding multiple devices in this single call then it will not prevent adding "devices" vs. "vdoms" to policy package
+  ##                        # for any of the devices referenced in this call.
+  ## :rename                # rename :policy_package_name to :rename  (not set if not passed)
+  ## :clone_from            # when creating a new :policy_package_name you can clone from an existing (in same ADOM) with name specified in :clone_from
+  ##
+  ## +Optional_Arguments(ARG2-ArrayOfHashes)   (This may actually be a single hash for one install target or array of hashes for multiple)
+  ## Example-1:  (adding multiple vdoms via ArrayOfHashes to package install targets)
+  ##  myinstalltargets = Array.new
+  ##  myinstalltargets[0] = {:dev => {:name => 'MSSP-1', :vdom => {:name => 'root'}}}
+  ##  myinstalltargets[1] = {:dev => {:name => 'MSSP-1', :vdom => {:name => 'transparent'}}
+  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, myinstalltargets})
+  ## Example-2:  (adding single vdom via Hash to package install targets)
+  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, {:dev => {:name => 'MSSP-1', :vdom =>{:name => 'root'}}) OR
+  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, {:dev => {:name => 'MSSP-1', :vdom =>{:oid => '3'}}} OR
+  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, {:dev => {:oid => '123', :vdom => {:name => 'root'}}) OR
+  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, {:dev => {:oid => '123', :vdom => {:oid => '3'}})
+  ## Example-3: (adding a group to package install targets)
+  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, {:grp => {:name => 'grp-name'}) OR
+  ##  add_policy_package({:policy_package_name => 'newpkg-name'}, {:grp => {:oid => 'grp-oid'})
+  ################################################################################################
+  def add_policy_package(opts = {}, install_targets=false)
+    querymsg = @authmsg
+    querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
+    querymsg[:is_global] = opts[:is_global] ? opts[:is_global] : '1'
+    querymsg[:clone_from] = opts[:clone_from] if opts[:clone_from]
+    querymsg[:rename] = opts[:rename] if opts[:rename]
+
+    begin
+      if opts[:policy_package_name]
+        querymsg[:policy_package_name] = opts[:policy_package_name]
+      else
+        raise ArgumentError.new('Must provide required arguments for method-> :policy_package_name')
+      end
+      # Because we need multiple attributes of same name contained in query message to specify more than one target we
+      # cannot using hash as container to pass to Savon.  We instead must convert existing hash to xml string and append
+      # the repetitious attributes.  Hash to XML translation is done with Gyoku.xml() method.
+      if install_targets.is_a?(Array)
+        querymsgxml = Gyoku.xml(querymsg) + "<packageInstallTarget>"
+        install_targets.each { |x|
+          if x[:grp]
+            if x[:grp][:oid] || x[:grp][:name]
+              querymsgxml += Gyoku.xml(x)
+            else
+              raise ArgumentError.new('Install target was passed with hash key :grp but did not contain one of sub keys :oid or :name')
+            end
+          elsif x[:dev]
+            if x[:dev][:oid] || x[:dev][:name]
+              if x[:dev][:vdom]
+                if !x[:dev][:vdom][:oid] && !x[:dev][:vdom][:name]
+                  raise ArgumentError.new('Install target was passed with hash key :dev and sub key :vdom but :vdom did not contain one of subkeys :oid or :name')
+                end
+              end
+              if x[:dev][:vdom] || opts[:fg_is_not_vdom_mode] == '1'
+                querymsgxml += Gyoku.xml(x)
+              else
+                raise ArgumentError.new('One or more targets is a device and not a vdom while :fg_is_not_vdom_mode was not set to 1')
+              end
+            else
+              raise ArgumentError.new('At least one of targets were passed with top key :dev but did not have one of required sub-keys :oid, :name or :vdom')
+            end
+          else
+            raise ArgumentError.new('Install target was passed but at least one of target hashes did not have one of top-level keys, either :grp or :dev')
+          end
+        }
+      elsif install_targets.is_a?(Hash)
+        querymsgxml = Gyoku.xml(querymsg) + "<packageInstallTarget>"
+        if install_targets[:grp]
+          if install_targets[:grp][:oid] || install_targets[:grp][:name]
+            querymsgxml += Gyoku.xml(install_targets)
+          else
+            raise ArgumentError.new('Install target was passed with hash key :grp but did not contain one of sub keys :oid or :name')
+          end
+        elsif install_targets[:dev]
+          if install_targets[:dev][:oid] || install_targets[:dev][:name] || install_targets[:dev][:vdom]
+            if install_targets[:dev][:vdom]
+              if !install_targets[:dev][:vdom][:oid] && !install_targets[:dev][:vdom][:name]
+                raise ArgumentError.new('Install target was passed with hash key :dev and sub key :vdom but :vdom did not contain one of subkeys :oid or :name')
+              else
+                querymsgxml += Gyoku.xml(install_targets)
+              end
+            else
+              if x[:dev][:vdom] || opts[:fg_is_not_vdom_mode] == '1'
+                querymsgxml += gyoku.xml(install_targets)
+              else
+                raise ArgumentError.new('One or more targets is a device and not a vdom while :fg_is_not_vdom_mode was not set to 1')
+              end
+            end
+          else
+            raise ArgumentError.new('At least one of targets were passed with top key :dev but did not have one of required sub-keys :oid, :name or :vdom')
+          end
+        end
+      end
+
+      if querymsgxml
+        querymsgxml += "</packageInstallTarget>"
+        exec_soap_query(:add_policy_package,querymsgxml,:add_policy_package_response,:policy_package_oid)
+      else
+        exec_soap_query(:add_policy_package,querymsg,:add_policy_package_response,:policy_package_oid)
+      end
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+  alias :edit_policy_package :add_policy_package
 
   ################################################################################################
   ## get_adom_by_name Returns Hash
@@ -1327,6 +1497,7 @@ class FmgApi
       return e
     end
   end
+
 
   #################################################################################
   ## fmg_rescue

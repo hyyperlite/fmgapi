@@ -43,9 +43,23 @@ fmg100c = FmgApi.new(opts[:wsdl_file], 'https://10.0.1.14:8080', opts[:namespace
 #myresult = fmgapi.add_adom({:name => 'apitest1', :dev_id => '234', :vdom_name => 'root'}) ## test adding vdom with adom using device id
 #myresult = fmgapi.add_adom({:name => 'apitest1', :serial_number => 'FGVM020000018111', :vdom_id => '3', :mr => '1'}) ## :test for mr specified without :version
 #myresult = fmgapi.add_adom({:name => 'apitest1', :vdom_id => '3'})  #test for error when not all VDOM args specified
-myresult = fmg100c.add_device({:ip => '10.0.1.1', :password => 'c0ns3qu3nc3', :name => 'FWF60D'})
+#myresult = fmg100c.add_device({:ip => '10.0.1.1', :password => 'c0ns3qu3nc3', :name => 'FWF60D'})
+#myresult = fmgapi.add_group({:name => 'apigroup1'})  #simple add group by just name
+#myresult = fmgapi.add_group({:name => 'apigroup4', :group_name => 'apigroup5'})  ## add with group_name (existing group membership test)
+#myresult = fmgapi.add_group({:name => 'apigroup3', :device_sn => 'FGVM020000018111'})  #simple add group by just name
+
+myinstalltargets = Array.new
+myinstalltargets[0] = {:dev => {:name => 'MSSP-1', :vdom => {:name => 'root'}}}
+myinstalltargets[1] = {:dev => {:name => 'MSSP-1', :vdom => {:name => 'transparent'}}}
+
+#myinstalltargets[0] = {:grp => {:oid => '111', :name => 'name1'}}
+#myinstalltargets[1] = {:dev => {:oid => '222', :name => 'name2'}}
+#myinstalltargets[2] = {:dev => {:vdom => {:test => 'test'}}}
+
+#myresult = fmgapi.add_policy_package({:policy_package_name => 'default'}, myinstalltargets)
+myresult = fmgapi.add_policy_package({:policy_package_name => 'newPackage'}, myinstalltargets)
 #myresult = fmgapi.get_adom_by_name(:adom => 'customerA')
-#myresult = fmgapi.get_adom_by_oid(:adom => '152')
+#myresult = fmgapi.get_adom_by_oid(:adom_id => '152')
 #myresult = fazapi.get_adom_list
 #myresult = fmgapi.get_config({:revision_number => '4', :dev_id => '234'})
 #myresult = fmgapi.get_config_revision_history({:dev_id => '234', :min_checkin_date => '20140428', :max_checkin_date => '20140430'})
@@ -62,7 +76,7 @@ myresult = fmg100c.add_device({:ip => '10.0.1.1', :password => 'c0ns3qu3nc3', :n
 #myresult = fmgapi.get_group_list(:adom => 'customerA')
 #myresult = fmgapi.get_group({:groupid => '101', :name => 'All_FortiGate', :adom=>'customerA'})
 #myresult = fmgapi.get_instlog({:serial_number => 'FGVM020000018110'})
-#myresult = fmgapi.get_package_list(:adom => 'customerA')
+#myresult = fmgapi.get_package_list(:adom => 'root')
 #myresult = fmgapi.get_script(:script_name => 'cli-sys-status')
 #myresult = fmgapi.get_script_log({:script_name => 'cli-sys-status', :sn => 'FGVM020000018110'})
 #myresult = fmgapi.get_script_log_summary({:sn => 'FGVM020000018110', :max_logs => '200'})
