@@ -1,0 +1,2742 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="FortiManagerWSxml"
+                  targetNamespace="http://r200806.ws.fmg.fortinet.com/"
+                  xmlns:tns="http://r200806.ws.fmg.fortinet.com/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="http://r200806.ws.fmg.fortinet.com/"
+            attributeFormDefault="unqualified"
+            elementFormDefault="unqualified"
+            targetNamespace="http://r200806.ws.fmg.fortinet.com/">
+      <xs:element name="createScript" type="tns:createScript"/>
+      <xs:element name="createScriptResponse" type="tns:createScriptResponse"/>
+      <xs:element name="deleteScript" type="tns:deleteScript"/>
+      <xs:element name="deleteScriptResponse" type="tns:deleteScriptResponse"/>
+      <xs:element name="getConfig" type="tns:getConfig"/>
+      <xs:element name="getConfigResponse" type="tns:getConfigResponse"/>
+      <xs:element name="getConfigRevisionHistory" type="tns:getConfigRevisionHistory"/>
+      <xs:element name="getConfigRevisionHistoryResponse" type="tns:getConfigRevisionHistoryResponse"/>
+      <xs:element name="getDevices" type="tns:getDevices"/>
+      <xs:element name="getDevicesResponse" type="tns:getDevicesResponse"/>
+      <xs:element name="getGroups" type="tns:getGroups"/>
+      <xs:element name="getGroupsResponse" type="tns:getGroupsResponse"/>
+      <xs:element name="getAdoms" type="tns:getAdoms"/>
+      <xs:element name="getAdomsResponse" type="tns:getAdomsResponse"/>
+      <xs:element name="getDeviceList" type="tns:getDeviceList"/>
+      <xs:element name="getDeviceListResponse" type="tns:getDeviceListResponse"/>
+      <xs:element name="listFazGeneratedReports" type="tns:listFazGeneratedReports"/>
+      <xs:element name="listFazGeneratedReportsResponse" type="tns:listFazGeneratedReportsResponse"/>
+      <xs:element name="getFazGeneratedReport" type="tns:getFazGeneratedReport"/>
+      <xs:element name="getFazGeneratedReportResponse" type="tns:getFazGeneratedReportResponse"/>
+      <xs:element name="searchFazLog" type="tns:searchFazLog"/>
+      <xs:element name="searchFazLogResponse" type="tns:searchFazLogResponse"/>
+      <xs:element name="getFazArchive" type="tns:getFazArchive"/>
+      <xs:element name="getFazArchiveResponse" type="tns:getFazArchiveResponse"/>
+      <xs:element name="removeFazArchive" type="tns:removeFazArchive"/>
+      <xs:element name="removeFazArchiveResponse" type="tns:removeFazArchiveResponse"/>
+      <xs:element name="getSystemStatus" type="tns:getSystemStatus"/>
+      <xs:element name="getSystemStatusResponse" type="tns:getSystemStatusResponse"/>
+      <xs:element name="getFazConfig" type="tns:getFazConfig"/>
+      <xs:element name="getFazConfigResponse" type="tns:getFazConfigResponse"/>
+      <xs:element name="setFazConfig" type="tns:setFazConfig"/>
+      <xs:element name="setFazConfigResponse" type="tns:setFazConfigResponse"/>
+      <xs:element name="runFazReport" type="tns:runFazReport"/>
+      <xs:element name="runFazReportResponse" type="tns:runFazReportResponse"/>
+      <xs:element name="getDeviceVdomList" type="tns:getDeviceVdomList"/>
+      <xs:element name="getDeviceVdomListResponse" type="tns:getDeviceVdomListResponse"/>
+      <xs:element name="getAdomList" type="tns:getAdomList"/>
+      <xs:element name="getAdomListResponse" type="tns:getAdomListResponse"/>
+      <xs:element name="listRevisionId" type="tns:listRevisionId"/>
+      <xs:element name="listRevisionIdResponse" type="tns:listRevisionIdResponse"/>
+      <xs:element name="editGroupMembership" type="tns:editGroupMembership"/>
+      <xs:element name="editGroupMembershipResponse" type="tns:editGroupMembershipResponse"/>
+      <xs:element name="editAdom" type="tns:editAdom"/>
+      <xs:element name="editAdomResponse" type="tns:editAdomResponse"/>
+      <xs:element name="addAdom" type="tns:addAdom"/>
+      <xs:element name="addAdomResponse" type="tns:addAdomResponse"/>
+      <xs:element name="addGroup" type="tns:addGroup"/>
+      <xs:element name="addGroupResponse" type="tns:addGroupResponse"/>
+      <xs:element name="addDevice" type="tns:addDevice"/>
+      <xs:element name="addDeviceResponse" type="tns:addDeviceResponse"/>
+      <xs:element name="deleteAdom" type="tns:deleteAdom"/>
+      <xs:element name="deleteAdomResponse" type="tns:deleteAdomResponse"/>
+      <xs:element name="deleteGroup" type="tns:deleteGroup"/>
+      <xs:element name="deleteGroupResponse" type="tns:deleteGroupResponse"/>
+      <xs:element name="deleteDevice" type="tns:deleteDevice"/>
+      <xs:element name="deleteDeviceResponse" type="tns:deleteDeviceResponse"/>
+      <xs:element name="retrieveConfig" type="tns:retrieveConfig"/>
+      <xs:element name="retrieveConfigResponse" type="tns:retrieveConfigResponse"/>
+      <xs:element name="deleteConfigRev" type="tns:deleteConfigRev"/>
+      <xs:element name="deleteConfigRevResponse" type="tns:deleteConfigRevResponse"/>
+      <xs:element name="getTaskList" type="tns:getTaskList"/>
+      <xs:element name="getTaskListResponse" type="tns:getTaskListResponse"/>
+      <xs:element name="getGroupList" type="tns:getGroupList"/>
+      <xs:element name="getGroupListResponse" type="tns:getGroupListResponse"/>
+      <xs:element name="getPackageList" type="tns:getPackageList"/>
+      <xs:element name="getPackageListResponse" type="tns:getPackageListResponse"/>
+      <xs:element name="getScript" type="tns:getScript"/>
+      <xs:element name="getScriptResponse" type="tns:getScriptResponse"/>
+      <xs:element name="runScript" type="tns:runScript"/>
+      <xs:element name="runScriptResponse" type="tns:runScriptResponse"/>
+      <xs:element name="installConfig" type="tns:installConfig"/>
+      <xs:element name="installConfigResponse" type="tns:installConfigResponse"/>
+      <xs:element name="getInstlog" type="tns:getInstlog"/>
+      <xs:element name="getInstlogResponse" type="tns:getInstlogResponse"/>
+      <xs:element name="revertConfig" type="tns:revertConfig"/>
+      <xs:element name="revertConfigResponse" type="tns:revertConfigResponse"/>
+      <xs:element name="getTCLRootFile" type="tns:getTCLRootFile"/>
+      <xs:element name="getTCLRootFileResponse" type="tns:getTCLRootFileResponse"/>
+      <xs:element name="getScriptLogSummary" type="tns:getScriptLogSummary"/>
+      <xs:element name="getScriptLogSummaryResponse" type="tns:getScriptLogSummaryResponse"/>
+      <xs:element name="getScriptLog" type="tns:getScriptLog"/>
+      <xs:element name="getScriptLogResponse" type="tns:getScriptLogResponse"/>
+      <xs:element name="getDeviceLicenseList" type="tns:getDeviceLicenseList"/>
+      <xs:element name="getDeviceLicenseListResponse" type="tns:getDeviceLicenseListResponse"/>
+      <xs:element name="importPolicy" type="tns:importPolicy"/>
+      <xs:element name="importPolicyResponse" type="tns:importPolicyResponse"/>
+      <xs:element name="addPolicyPackage" type="tns:addPolicyPackage"/>
+      <xs:element name="addPolicyPackageResponse" type="tns:addPolicyPackageResponse"/>
+      <xs:element name="assignGlobalPolicy" type="tns:assignGlobalPolicy"/>
+      <xs:element name="assignGlobalPolicyResponse" type="tns:assignGlobalPolicyResponse"/>
+      <xs:element name="addWTP" type="tns:addWTP"/>
+      <xs:element name="addWTPResponse" type="tns:addWTPResponse"/>
+
+      <xs:complexType name="createScriptResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="xs:long"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="scriptInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="checkinDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="checkinUser" type="xs:string"/>
+          <xs:element minOccurs="0" name="content" type="xs:string"/>
+          <xs:element minOccurs="0" name="description" type="xs:string"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="type" type="xs:string"/>
+          <xs:element minOccurs="0" name="oid" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="sequenceNumber" type="xs:int"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="scriptLogSummary">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="logId" type="xs:int"/>
+          <xs:element minOccurs="0" name="scriptName" type="xs:string"/>
+          <xs:element minOccurs="0" name="execTime" type="xs:dateTime"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="scriptLog">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="content" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="logFileEntry">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="downloadURL" type="xs:string"/>
+          <xs:element minOccurs="0" name="endDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="fileID" type="xs:string"/>
+          <xs:element name="size" type="xs:int"/>
+          <xs:element minOccurs="0" name="startDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="type" type="xs:string"/>
+          <xs:element minOccurs="0" name="validBefore" type="xs:dateTime"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="configRevisionInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="branchPoint" type="xs:string"/>
+          <xs:element minOccurs="0" name="checkinDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="checkinUser" type="xs:string"/>
+          <xs:element minOccurs="0" name="content" type="xs:string"/>
+          <xs:element minOccurs="0" name="message" type="xs:string"/>
+          <xs:element minOccurs="0" name="oid" type="xs:long"/>
+          <xs:element minOccurs="0" name="osVersion" type="xs:string"/>
+          <xs:element minOccurs="0" name="platform" type="xs:string"/>
+          <xs:element minOccurs="0" name="revisionNum" type="xs:int"/>
+          <xs:element minOccurs="0" name="serialNumber" type="xs:string"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="tag" type="xs:string"/>
+          <xs:element minOccurs="0" name="comment" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:simpleType name="compressionType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="tar"/>
+          <xs:enumeration value="gzip"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="archiveTypes">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="web"/>
+          <xs:enumeration value="email"/>
+          <xs:enumeration value="ftp"/>
+          <xs:enumeration value="IM"/>
+          <xs:enumeration value="MMS"/>
+          <xs:enumeration value="quarantine"/>
+          <xs:enumeration value="IPS"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="searchContent">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="logs" />
+          <xs:enumeration value="contentLogs" />
+          <xs:enumeration value="localLogs" />
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="logFormats">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="rawFormat"/>
+          <xs:enumeration value="CSV"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="logTypes">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="event"/>
+          <xs:enumeration value="traffic"/>
+          <xs:enumeration value="attack"/>
+          <xs:enumeration value="antiVirus"/>
+          <xs:enumeration value="webLogs"/>
+          <xs:enumeration value="IM"/>
+          <xs:enumeration value="email"/>
+          <xs:enumeration value="content"/>
+          <xs:enumeration value="history"/>
+          <xs:enumeration value="generic"/>
+          <xs:enumeration value="voIP"/>
+          <xs:enumeration value="DLP"/>
+          <xs:enumeration value="appCtrl"/>
+          <xs:enumeration value="netScan"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:complexType name="logFields">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element minOccurs="0" name="value" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="eventLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+          <xs:element name="devname" minOccurs="0" type="xs:string" />
+          <xs:element name="logID" minOccurs="0" type="xs:string" />
+          <xs:element name="type" minOccurs="0" type="xs:string" />
+          <xs:element name="subtype" minOccurs="0" type="xs:string" />
+          <xs:element name="pri" minOccurs="0" type="xs:string" />
+          <xs:element name="vd" minOccurs="0" type="xs:string" />
+          <xs:element name="user" minOccurs="0" type="xs:string" />
+          <xs:element name="ui" minOccurs="0" type="xs:string" />
+          <xs:element name="action" minOccurs="0" type="xs:string" />
+          <xs:element name="status" minOccurs="0" type="xs:string" />
+          <xs:element name="reason" minOccurs="0" type="xs:string" />
+          <xs:element name="msg" minOccurs="0" type="xs:string" />
+          <xs:element name="cpu" minOccurs="0" type="xs:string" />
+          <xs:element name="mem" minOccurs="0" type="xs:string" />
+          <xs:element name="total_session" minOccurs="0" type="xs:string" />
+          <xs:element name="endpoint" minOccurs="0" type="xs:string" />
+          <xs:element name="nonDefFields" minOccurs="0" type="tns:logFields" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="trafficLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="attackLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="antiVirusLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="webLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="contentLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="IMLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="emailLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="historyLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="genericLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="VoIPLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="DLPLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="appCtrlLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="netScanLogsType">
+        <xs:sequence>
+          <xs:element name="itime" minOccurs="0" type="xs:int" />
+          <xs:element name="date" minOccurs="0" type="xs:date" />
+          <xs:element name="time" minOccurs="0" type="xs:time" />
+          <xs:element name="deviceID" minOccurs="0" type="xs:string" />
+          <xs:element name="clusterID" minOccurs="0" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:simpleType name="quarantineTypes">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="infected"/>
+          <xs:enumeration value="heuristics"/>
+          <xs:enumeration value="blocked"/>
+          <xs:enumeration value="spam"/>
+          <xs:enumeration value="intercepted"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:complexType name="fazReportData">
+        <xs:sequence>
+          <xs:element name="reportContent" type="xsd:base64Binary" />
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="getScript">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="type" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="servicePass">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="userID" type="xs:string"/>
+          <xs:element minOccurs="0" name="password" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="errorMsg">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorCode" type="xs:int"/>
+          <xs:element minOccurs="0" name="errorMsg" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="instLog">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="content" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getConfigRevisionHistory">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="serialNumber" type="xs:string"/>
+          <xs:element minOccurs="0" name="devId" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="checkinUser" type="xs:string"/>
+          <xs:element minOccurs="0" name="minCheckinDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="maxCheckinDate" type="xs:dateTime"/>
+          <xs:element minOccurs="0" name="minRevisionNumber" type="xs:int"/>
+          <xs:element minOccurs="0" name="maxRevisionNumber" type="xs:int"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getConfigRevisionHistoryResponse">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:configRevisionInfo"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deleteScriptResponse"/>
+      <xs:complexType name="deviceInfo">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="devId" type="xs:string"/>
+          <xs:element minOccurs="1" name="firmware" type="xs:string"/>
+          <xs:element minOccurs="1" name="firmwareVersion" type="xs:string"/>
+          <xs:element minOccurs="1" name="buildNum" type="xs:string"/>
+          <xs:element minOccurs="0" name="description" type="xs:string"/>
+          <xs:element minOccurs="1" name="hostname" type="xs:string"/>
+          <xs:element minOccurs="1" name="platform" type="xs:string"/>
+          <xs:element minOccurs="1" name="sn" type="xs:string"/>
+          <xs:element minOccurs="1" name="ip" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deviceDetail">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="devId" type="xs:string"/>
+          <xs:element minOccurs="1" name="firmware" type="xs:string"/>
+          <xs:element minOccurs="1" name="firmwareVersion" type="xs:string"/>
+          <xs:element minOccurs="1" name="buildNum" type="xs:string"/>
+          <xs:element minOccurs="0" name="description" type="xs:string"/>
+          <xs:element minOccurs="1" name="hostname" type="xs:string"/>
+          <xs:element minOccurs="1" name="platform" type="xs:string"/>
+          <xs:element minOccurs="1" name="sn" type="xs:string"/>
+          <xs:element minOccurs="1" name="ip" type="xs:string"/>
+          <xs:element minOccurs="0" name="IPSContract" type="xs:string"/>
+          <xs:element minOccurs="0" name="antiVirusContract" type="xs:string"/>
+          <xs:element minOccurs="0" name="appsignature" type="xs:string"/>
+          <xs:element minOccurs="0" name="mgmtMode" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="metafield">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="name" type="xs:string"/>
+          <xs:element minOccurs="1" name="value" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="metafields">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="metafield" type="tns:metafield"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="adomInfo">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="oid" type="xs:unsignedLong"/>
+          <xs:element minOccurs="1" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="description" type="xs:string"/>
+          <xs:element minOccurs="1" name="version" type="xs:int"/>
+          <xs:element minOccurs="1" name="mr" type="xs:int"/>
+          <xs:element minOccurs="1" name="state" type="xs:boolean"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="adomDetail">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="oid" type="xs:unsignedLong"/>
+          <xs:element minOccurs="1" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="description" type="xs:string"/>
+          <xs:element minOccurs="1" name="version" type="xs:int"/>
+          <xs:element minOccurs="1" name="mr" type="xs:int"/>
+          <xs:element minOccurs="1" name="state" type="xs:boolean"/>
+          <xs:element minOccurs="1" name="isBackupMode" type="xs:boolean"/>
+          <xs:element minOccurs="1" name="VPNManagement" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="metafields" type="tns:metafields"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="dvmBriefInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="oid" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="groupInfo">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="oid" type="xs:unsignedLong"/>
+          <xs:element minOccurs="1" name="name" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="groupDetail">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="oid" type="xs:unsignedLong"/>
+          <xs:element minOccurs="1" name="name" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="devMemberList" type="tns:dvmBriefInfo"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="grpMemberList" type="tns:dvmBriefInfo"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="grpTarget">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="oid" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="vdomTarget">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="oid" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="devTarget">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="oid" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="vdom" type="tns:vdomTarget"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="packageInstallTarget">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="grp" type="tns:grpTarget"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="dev" type="tns:devTarget"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deleteScript">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="type" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getDeviceList">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="detail" type="xs:boolean"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="listFazGeneratedReports">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element name="startDate" type="xs:dateTime" minOccurs="0" default="1970-01-01T00:00:00" />
+          <xs:element name="endDate" type="xs:dateTime" minOccurs="0" default="1970-01-01T00:00:00" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getFazGeneratedReport">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="reportDate" type="xs:string"/>
+          <xs:element minOccurs="0" name="reportName" type="xs:string"/>
+          <xs:element minOccurs="0" default="tar" name="compression" type="tns:compressionType"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="searchFazLog">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="content" type="tns:searchContent" default="logs" />
+          <xs:element minOccurs="0" name="format" type="tns:logFormats" default="rawFormat" />
+          <xs:element minOccurs="0" name="deviceName" type="xs:string"/>
+          <xs:element name="logType" type="tns:logTypes" default="traffic" />
+          <xs:element minOccurs="0" name="searchCriteria" type="xs:string" />
+          <xs:element name="maxNumMatches" type="xs:int" default="30" />
+          <xs:element name="startIndex" type="xs:int" default="1" />
+          <xs:element name="checkArchive" type="xs:int" default="0" />
+          <xs:element minOccurs="0" name="DLPArchiveType" type="tns:archiveTypes" />
+          <xs:element minOccurs="0" default="tar" name="compression" type="tns:compressionType"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getFazArchive">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="devId" type="xs:string" />
+          <xs:element minOccurs="0" name="type" type="tns:archiveTypes" />
+          <xs:element minOccurs="0" name="fileName" type="xs:string"/>
+          <xs:element minOccurs="0" name="checksum" type="xs:string"/>
+          <xs:element minOccurs="0" name="zipPassword" type="xs:string"/>
+          <xs:element minOccurs="0" default="tar" name="compression" type="tns:compressionType"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="removeFazArchive">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="devId" type="xs:string" />
+          <xs:element minOccurs="0" name="type" type="tns:archiveTypes" />
+          <xs:element minOccurs="0" name="fileName" type="xs:string"/>
+          <xs:element minOccurs="0" name="checksum" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getSystemStatus">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getFazConfig">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="setFazConfig">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="config" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="runFazReport">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="reportTemplate" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="filter" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getDeviceVdomList">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="devName" type="xs:string"/>
+          <xs:element minOccurs="0" name="devID" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="contract">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="support_type" type="xs:string"/>
+          <xs:element minOccurs="0" name="support_level" type="xs:string"/>
+          <xs:element minOccurs="0" name="expiry_date" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="device">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="serial_number" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="contract" type="tns:contract"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="deviceLicenseList">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="device" type="tns:device"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="getDeviceListResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="deviceInfo" type="tns:deviceInfo"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="deviceDetail" type="tns:deviceDetail"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="listFazGeneratedReportsResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element name="totalNumberExists" type="xs:int" />
+          <xs:element name="reportList" minOccurs="0" maxOccurs="30">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" name="reportName" type="xs:string"/>
+                <xs:element name="startTime" type="xs:dateTime" />
+                <xs:element name="endTime" type="xs:dateTime" />
+                <xs:element name="reportProgressPercent" type="xs:int" />
+                <xs:element name="size" type="xs:int" />
+                <xs:element minOccurs="0" name="formats" type="xs:string"/>
+                <xs:element name="activityReports" type="xs:string" minOccurs="0" maxOccurs="50" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getFazGeneratedReportResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="reportName" type="xs:string"/>
+          <xs:element name="size" type="xs:int" />
+          <xs:element minOccurs="0" name="fazReportData" type="tns:fazReportData"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="searchFazLogResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element name="totalResultsFound" type="xs:int" />
+          <xs:element name="matchesReturned" type="xs:int" />
+          <xs:element name="startIndex" type="xs:int" />
+          <xs:element name="logs">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="100" name="data">
+                  <xs:complexType>
+                    <xs:choice>
+                      <xs:element minOccurs="1" name="logEntry" type="xs:string"/>
+                      <xs:element minOccurs="1" name="eLog" type="tns:eventLogsType"/>
+                      <xs:element minOccurs="1" name="tLog" type="tns:trafficLogsType"/>
+                      <xs:element minOccurs="1" name="aLog" type="tns:attackLogsType"/>
+                      <xs:element minOccurs="1" name="vLog" type="tns:antiVirusLogsType"/>
+                      <xs:element minOccurs="1" name="wLog" type="tns:webLogsType"/>
+                      <xs:element minOccurs="1" name="cLog" type="tns:contentLogsType"/>
+                      <xs:element minOccurs="1" name="iLog" type="tns:IMLogsType"/>
+                      <xs:element minOccurs="1" name="sLog" type="tns:emailLogsType"/>
+                      <xs:element minOccurs="1" name="hLog" type="tns:historyLogsType"/>
+                      <xs:element minOccurs="1" name="gLog" type="tns:genericLogsType"/>
+                      <xs:element minOccurs="1" name="pLog" type="tns:VoIPLogsType"/>
+                      <xs:element minOccurs="1" name="dLog" type="tns:DLPLogsType"/>
+                      <xs:element minOccurs="1" name="rLog" type="tns:appCtrlLogsType"/>
+                      <xs:element minOccurs="1" name="nLog" type="tns:netScanLogsType"/>
+                    </xs:choice>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" name="CompressedData" type="xs:base64Binary" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="getFazArchiveResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element name="fileList" minOccurs="0" maxOccurs="10000">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" name="fileName" type="xs:string" />
+                <xs:element name="data" type="xsd:base64Binary" />
+                <xs:element minOccurs="0" name="error" type="xs:string" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="archiveFile" type="xsd:base64Binary" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="removeFazArchiveResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getSystemStatusResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="platformType" type="xs:string"/>
+          <xs:element minOccurs="0" name="version" type="xs:string"/>
+          <xs:element minOccurs="0" name="serialNumber" type="xs:string"/>
+          <xs:element minOccurs="0" name="biosVersion" type="xs:string"/>
+          <xs:element minOccurs="0" name="hostName" type="xs:string"/>
+          <xs:element minOccurs="0" name="maxNumAdminDomains" type="xs:int"/>
+          <xs:element minOccurs="0" name="maxNumDeviceGroup" type="xs:int"/>
+          <xs:element minOccurs="0" name="adminDomainConf" type="xs:string"/>
+          <xs:element minOccurs="0" name="fipsMode" type="xs:string"/>
+          <xs:element minOccurs="0" name="diskSpaceFreeMB" type="xs:int"/>
+          <xs:element minOccurs="0" name="diskSpaceUsedMB" type="xs:int"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getFazConfigResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="config" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="setFazConfigResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="cliError" type="xs:string"/>
+          <xs:element minOccurs="0" name="errorLineNumber" type="xs:int"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="runFazReportResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="reportTemplate" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="vdomInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="oid" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getDeviceVdomListResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="oid" type="xs:unsignedLong"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:vdomInfo"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getGroupList">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="detail" type="xs:boolean"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getGroupListResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="groupInfo" type="tns:groupInfo"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="groupDetail" type="tns:groupDetail"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getAdomList">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="detail" type="xs:boolean"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getAdomListResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="adomInfo" type="tns:adomInfo"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="adomDetail" type="tns:adomDetail"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="packageInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="oid" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="type" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="children" type="tns:packageInfo"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getPackageList">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element name="isGlobal" type="xs:boolean" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getPackageListResponse">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:packageInfo"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="listRevisionId">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="devId" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="serialNumber" type="xs:string"/>
+          <xs:element minOccurs="0" name="revName" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="listRevisionIdResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="revId" type="xs:int"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="editGroupMembership">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="grpId" type="xs:unsignedLong"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="addDeviceSNList" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="addDeviceIDList" type="xs:unsignedLong"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="delDeviceSNList" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="delDeviceIDList" type="xs:unsignedLong"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="addGroupNameList" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="addGroupIDList" type="xs:unsignedLong"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="delGroupNameList" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="delGroupIDList" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="editGroupMembershipResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="devSNVdom">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="SN" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="vdomName" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="vdomID" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="devIDVdom">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ID" type="xs:unsignedLong"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="vdomName" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="vdomID" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="editAdom">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="1" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="version" type="xs:int"/>
+          <xs:element minOccurs="0" name="mr" type="xs:int"/>
+          <xs:element minOccurs="0" name="state" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="isBackupMode" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="VPNManagement" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="metafields" type="tns:metafields"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="addDeviceSNVdom" type="tns:devSNVdom"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="addDeviceIDVdom" type="tns:devIDVdom"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="editAdomResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="addGroup">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="1" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="description" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="deviceSN" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="deviceID" type="xs:unsignedLong"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="groupName" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="groupID" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="addGroupResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="grpId" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="addAdom">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="1" name="name" type="xs:string"/>
+          <xs:element minOccurs="1" name="version" type="xs:int"/>
+          <xs:element minOccurs="1" name="mr" type="xs:int"/>
+          <xs:element minOccurs="0" name="isBackupMode" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="VPNManagement" type="xs:boolean"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="deviceSNVdom" type="tns:devSNVdom"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="deviceIDVdom" type="tns:devIDVdom"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="addAdomResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="adomOid" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="addDevice">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="ip" type="xs:string"/>
+          <xs:element minOccurs="0" name="autod" type="xs:string"/>
+          <xs:element minOccurs="0" name="deviceType" type="xs:string"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="adminUser" type="xs:string"/>
+          <xs:element minOccurs="0" name="password" type="xs:string"/>
+          <xs:element minOccurs="0" name="version" type="xs:int"/>
+          <xs:element minOccurs="0" name="mr" type="xs:int"/>
+          <xs:element minOccurs="0" name="model" type="xs:string"/>
+          <xs:element minOccurs="0" name="flags" type="xs:string"/>
+          <xs:element minOccurs="0" name="description" type="xs:string"/>
+          <xs:element minOccurs="0" name="devId" type="xs:string"/>
+          <xs:element minOccurs="0" name="SN" type="xs:string"/>
+          <xs:element minOccurs="0" name="SNprefix" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="addDeviceResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="taskId" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deleteAdom">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adomName" type="xs:string"/>
+          <xs:element minOccurs="0" name="adomOid" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deleteAdomResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deleteGroup">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="grpId" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deleteGroupResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deleteDevice">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="devId" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="serialNumber" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deleteDeviceResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="taskId" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="retrieveConfig">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="devId" type="xs:string"/>
+          <xs:element minOccurs="0" name="serialNumber" type="xs:string"/>
+          <xs:element minOccurs="0" name="newRevName" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="retrieveConfigResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="taskId" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deleteConfigRev">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="devId" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="serialNumber" type="xs:string"/>
+          <xs:element minOccurs="0" name="revName" type="xs:string"/>
+          <xs:element minOccurs="0" name="revId" type="xs:int"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deleteConfigRevResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="historyInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="percentage" type="xs:int"/>
+          <xs:element minOccurs="0" name="description" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deviceListInfo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="devName" type="xs:string"/>
+          <xs:element minOccurs="0" name="ip" type="xs:string"/>
+          <xs:element minOccurs="0" name="status" type="xs:string"/>
+          <xs:element minOccurs="0" name="message" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="history" type="tns:historyInfo"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="taskListInfo">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="taskId" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="source" type="xs:string"/>
+          <xs:element minOccurs="0" name="description" type="xs:string"/>
+          <xs:element minOccurs="0" name="userID" type="xs:string"/>
+          <xs:element minOccurs="0" name="status" type="xs:string"/>
+          <xs:element minOccurs="0" name="startTime" type="xs:dateTime"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="deviceList" type="tns:deviceListInfo"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getTaskList">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="1" name="taskId" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getTaskListResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="taskList" type="tns:taskListInfo"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getConfigResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:configRevisionInfo"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="createScript">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element name="isGlobal" type="xs:boolean" minOccurs="0"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="type" type="xs:string"/>
+          <xs:element minOccurs="0" name="description" type="xs:string"/>
+          <xs:element minOccurs="0" name="content" type="xs:string"/>
+          <xs:element minOccurs="0" name="overwrite" type="xs:boolean"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getConfig">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="devId" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="serialNumber" type="xs:string"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="revisionNumber" type="xs:int"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getDevices">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="serialNumbers" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="devIds" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getDevicesResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="deviceDetail" type="tns:deviceDetail"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getGroups">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="names" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="grpIds" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getGroupsResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="groupDetail" type="tns:groupDetail"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getAdoms">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="names" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="adomIds" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getAdomsResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="adomDetail" type="tns:adomDetail"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getScriptResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:scriptInfo"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="InvalidServicePassFault" type="tns:InvalidServicePassFault"/>
+      <xs:complexType name="InvalidServicePassFault">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:element name="TooManyEntriesFault" type="tns:TooManyEntriesFault"/>
+      <xs:complexType name="TooManyEntriesFault">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="runScript">
+        <xs:sequence>
+          <xs:element name="servicePass" type="tns:servicePass" minOccurs="0"/>
+          <xs:element name="isGlobal" type="xs:boolean" minOccurs="0"/>
+          <xs:element name="name" type="xs:string" minOccurs="0"/>
+          <xs:element name="type" type="xs:string" minOccurs="0"/>
+          <xs:element name="devId" type="xs:string" minOccurs="0"/>
+          <xs:element name="serialNumber" type="xs:string" minOccurs="0"/>
+          <xs:element name="runOnDB" type="xs:boolean" minOccurs="0"/>
+          <xs:element name="pkgoid" type="xs:unsignedLong" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="runScriptResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="taskId" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="installConfig">
+        <xs:sequence>
+          <xs:element name="servicePass" type="tns:servicePass" minOccurs="0"/>
+          <xs:element name="from" type="xs:string" minOccurs="0"/>
+          <xs:element name="to" type="xs:string" minOccurs="0"/>
+          <xs:element name="adom" type="xs:string" minOccurs="0"/>
+          <xs:element name="pkgoid" type="xs:unsignedLong" minOccurs="0"/>
+          <xs:element name="devId" type="xs:unsignedLong" minOccurs="0"/>
+          <xs:element name="serialNumber" type="xs:string" minOccurs="0"/>
+          <xs:element name="newRevName" type="xs:string" minOccurs="0"/>
+          <xs:element name="instValidate" type="xs:boolean" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="installConfigResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="taskId" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getInstlog">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="0" name="devId" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="serialNumber" type="xs:string"/>
+          <xs:element minOccurs="0" name="taskId" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getInstlogResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="instLog" type="tns:instLog"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="revertConfig">
+        <xs:sequence>
+          <xs:element name="servicePass" type="tns:servicePass" minOccurs="0"/>
+          <xs:element name="devId" type="xs:unsignedLong" minOccurs="0"/>
+          <xs:element name="serialNumber" type="xs:string" minOccurs="0"/>
+          <xs:element name="revId" type="xs:int" minOccurs="1"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="revertConfigResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getTCLRootFile">
+        <xs:sequence>
+          <xs:element name="servicePass" type="tns:servicePass" minOccurs="0"/>
+          <xs:element name="fileName" type="xs:string"/>
+          <xs:element name="fileOffset" type="xs:int"/>
+          <xs:element name="fileMaxLen" type="xs:int"/>
+          <xs:element name="fileEncode">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="base64"/>
+                <xs:enumeration value="hex"/>
+                <xs:enumeration value="raw"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getTCLRootFileResponse">
+        <xs:sequence>
+          <xs:element name="fileName" type="xs:string"/>
+          <xs:element name="fileOffset" type="xs:int"/>
+          <xs:element name="fileLength" type="xs:int"/>
+          <xs:choice maxOccurs="1" minOccurs="1">
+            <xs:element name="fileContentsRaw" type="xs:string"/>
+            <xs:element name="fileContentsBase64" type="xs:base64Binary"/>
+            <xs:element name="fileContentsHex" type="xs:hexBinary"/>
+          </xs:choice>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getScriptLogSummary">
+        <xs:sequence>
+          <xs:element name="servicePass" type="tns:servicePass" minOccurs="0"/>
+          <xs:element name="devId" type="xs:unsignedLong" minOccurs="0"/>
+          <xs:element name="serialNumber" type="xs:string" minOccurs="0"/>
+          <xs:element name="maxLogs" type="xs:int" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getScriptLogSummaryResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:scriptLogSummary"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getScriptLog">
+        <xs:sequence>
+          <xs:element name="servicePass" type="tns:servicePass" minOccurs="0"/>
+          <xs:element name="devId" type="xs:unsignedLong" minOccurs="0"/>
+          <xs:element name="serialNumber" type="xs:string" minOccurs="0"/>
+          <xs:element name="logId" type="xs:int" minOccurs="0"/>
+          <xs:element minOccurs="0" name="scriptName" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getScriptLogResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="return" type="tns:scriptLog"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="getDeviceLicenseList">
+        <xs:sequence>
+          <xs:element name="servicePass" type="tns:servicePass" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getDeviceLicenseListResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:deviceLicenseList"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="importPolicy">
+        <xs:sequence>
+          <xs:element name="servicePass" type="tns:servicePass" minOccurs="0"/>
+          <xs:element minOccurs="0" name="adomName" type="xs:string"/>
+          <xs:element minOccurs="0" name="adomOid" type="xs:int"/>
+          <xs:element minOccurs="0" name="devName" type="xs:string"/>
+          <xs:element minOccurs="0" name="devId" type="xs:int"/>
+          <xs:element minOccurs="0" name="vdomName" type="xs:string"/>
+          <xs:element minOccurs="0" name="vdomId" type="xs:int"/>
+          <xs:element minOccurs="0" name="policyPackageName" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="importPolicyResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="adomName" type="xs:string"/>
+          <xs:element minOccurs="0" name="adomOid" type="xs:int"/>
+          <xs:element minOccurs="0" name="devName" type="xs:string"/>
+          <xs:element minOccurs="0" name="devId" type="xs:int"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="vdoms" type="tns:vdomInfo"/>
+          <xs:element minOccurs="0" name="report" type="xs:string"/>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="return" type="tns:importPolicy"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="addPolicyPackage">
+        <xs:sequence>
+          <xs:element name="servicePass" type="tns:servicePass" minOccurs="0"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element name="isGlobal" type="xs:boolean" minOccurs="0"/>
+          <xs:element minOccurs="0" name="policyPackageName" type="xs:string"/>
+          <xs:element minOccurs="0" name="cloneFrom" type="xs:string"/>
+          <xs:element minOccurs="0" name="rename" type="xs:string"/>
+          <xs:element minOccurs="0" name="packageInstallTarget" type="tns:packageInstallTarget"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="addPolicyPackageResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="policyPackageOid" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="taskId" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="adomTarget">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="oid" type="xs:unsignedLong"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element minOccurs="0" name="included" type="xs:boolean"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="pkg" type="tns:packageInfo"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="assignGlobalPolicy">
+        <xs:sequence>
+          <xs:element name="servicePass" type="tns:servicePass" minOccurs="0"/>
+          <xs:element minOccurs="0" name="adom" type="xs:string"/>
+          <xs:element minOccurs="0" name="policyPackageName" type="xs:string"/>
+          <xs:element minOccurs="0" name="policyPackageOid" type="xs:unsignedLong"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="adomList" type="tns:adomTarget"/>
+          <xs:element minOccurs="0" name="allObjects" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="installToDevice" type="xs:boolean"/>
+          <xs:element minOccurs="0" name="checkAssigndDup" type="xs:boolean"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="assignGlobalPolicyResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="taskId" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="powerLevelType">
+        <xs:restriction base="xs:int">
+          <xs:minInclusive value="0"/>
+          <xs:maxInclusive value="100"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="addWTP">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="servicePass" type="tns:servicePass"/>
+          <xs:element minOccurs="1" name="serialNumber" type="xs:string"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+          <xs:element minOccurs="1" name="deviceName" type="xs:string"/>
+          <xs:element minOccurs="0" name="vdomName" type="xs:string"/>
+          <xs:element minOccurs="0" name="comment" type="xs:string"/>
+          <xs:element minOccurs="0" name="powerLevel" type="tns:powerLevelType"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="vaps" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="addWTPResponse">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="errorMsg" type="tns:errorMsg"/>
+          <xs:element minOccurs="0" name="taskId" type="xs:unsignedLong"/>
+        </xs:sequence>
+      </xs:complexType>
+
+    </xs:schema>
+    <xs:schema
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://jaxb.dev.java.net/array"
+            attributeFormDefault="unqualified"
+            elementFormDefault="unqualified"
+            targetNamespace="http://jaxb.dev.java.net/array">
+      <xs:complexType final="#all" name="stringArray">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getDevicesResponse">
+    <wsdl:part name="parameters" element="tns:getDevicesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getGroupsResponse">
+    <wsdl:part name="parameters" element="tns:getGroupsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAdomsResponse">
+    <wsdl:part name="parameters" element="tns:getAdomsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createScriptResponse">
+    <wsdl:part name="parameters" element="tns:createScriptResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getScript">
+    <wsdl:part name="parameters" element="tns:getScript">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createScript">
+    <wsdl:part name="parameters" element="tns:createScript">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getDeviceList">
+    <wsdl:part name="parameters" element="tns:getDeviceList">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listFazGeneratedReports">
+    <wsdl:part name="parameters" element="tns:listFazGeneratedReports">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getFazGeneratedReport">
+    <wsdl:part name="parameters" element="tns:getFazGeneratedReport">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="searchFazLog">
+    <wsdl:part name="parameters" element="tns:searchFazLog">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getFazArchive">
+    <wsdl:part name="parameters" element="tns:getFazArchive">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="removeFazArchive">
+    <wsdl:part name="parameters" element="tns:removeFazArchive">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSystemStatus">
+    <wsdl:part name="parameters" element="tns:getSystemStatus">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getFazConfig">
+    <wsdl:part name="parameters" element="tns:getFazConfig">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setFazConfig">
+    <wsdl:part name="parameters" element="tns:setFazConfig">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="runFazReport">
+    <wsdl:part name="parameters" element="tns:runFazReport">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getDeviceVdomList">
+    <wsdl:part name="parameters" element="tns:getDeviceVdomList">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAdomList">
+    <wsdl:part name="parameters" element="tns:getAdomList">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAdomListResponse">
+    <wsdl:part name="parameters" element="tns:getAdomListResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listRevisionId">
+    <wsdl:part name="parameters" element="tns:listRevisionId">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listRevisionIdResponse">
+    <wsdl:part name="parameters" element="tns:listRevisionIdResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="editGroupMembership">
+    <wsdl:part name="parameters" element="tns:editGroupMembership">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="editGroupMembershipResponse">
+    <wsdl:part name="parameters" element="tns:editGroupMembershipResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="editAdom">
+    <wsdl:part name="parameters" element="tns:editAdom">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="editAdomResponse">
+    <wsdl:part name="parameters" element="tns:editAdomResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addAdom">
+    <wsdl:part name="parameters" element="tns:addAdom">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addAdomResponse">
+    <wsdl:part name="parameters" element="tns:addAdomResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addGroup">
+    <wsdl:part name="parameters" element="tns:addGroup">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addGroupResponse">
+    <wsdl:part name="parameters" element="tns:addGroupResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addDevice">
+    <wsdl:part name="parameters" element="tns:addDevice">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="addDeviceResponse">
+    <wsdl:part name="parameters" element="tns:addDeviceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteAdom">
+    <wsdl:part name="parameters" element="tns:deleteAdom">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteAdomResponse">
+    <wsdl:part name="parameters" element="tns:deleteAdomResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteGroup">
+    <wsdl:part name="parameters" element="tns:deleteGroup">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteGroupResponse">
+    <wsdl:part name="parameters" element="tns:deleteGroupResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteDevice">
+    <wsdl:part name="parameters" element="tns:deleteDevice">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteDeviceResponse">
+    <wsdl:part name="parameters" element="tns:deleteDeviceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="retrieveConfig">
+    <wsdl:part name="parameters" element="tns:retrieveConfig">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="retrieveConfigResponse">
+    <wsdl:part name="parameters" element="tns:retrieveConfigResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteConfigRev">
+    <wsdl:part name="parameters" element="tns:deleteConfigRev">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteConfigRevResponse">
+    <wsdl:part name="parameters" element="tns:deleteConfigRevResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTaskList">
+    <wsdl:part name="parameters" element="tns:getTaskList">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTaskListResponse">
+    <wsdl:part name="parameters" element="tns:getTaskListResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getGroupList">
+    <wsdl:part name="parameters" element="tns:getGroupList">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getGroupListResponse">
+    <wsdl:part name="parameters" element="tns:getGroupListResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPackageList">
+    <wsdl:part name="parameters" element="tns:getPackageList">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPackageListResponse">
+    <wsdl:part name="parameters" element="tns:getPackageListResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getDevices">
+    <wsdl:part name="parameters" element="tns:getDevices">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getGroups">
+    <wsdl:part name="parameters" element="tns:getGroups">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAdoms">
+    <wsdl:part name="parameters" element="tns:getAdoms">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getConfigRevisionHistory">
+    <wsdl:part name="parameters" element="tns:getConfigRevisionHistory">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InvalidServicePassException">
+    <wsdl:part name="InvalidServicePassException" element="tns:InvalidServicePassFault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteScriptResponse">
+    <wsdl:part name="parameters" element="tns:deleteScriptResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getConfigRevisionHistoryResponse">
+    <wsdl:part name="parameters" element="tns:getConfigRevisionHistoryResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getConfig">
+    <wsdl:part name="parameters" element="tns:getConfig">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getConfigResponse">
+    <wsdl:part name="parameters" element="tns:getConfigResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getDeviceListResponse">
+    <wsdl:part name="parameters" element="tns:getDeviceListResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listFazGeneratedReportsResponse">
+    <wsdl:part name="parameters" element="tns:listFazGeneratedReportsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getFazGeneratedReportResponse">
+    <wsdl:part name="parameters" element="tns:getFazGeneratedReportResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="searchFazLogResponse">
+    <wsdl:part name="parameters" element="tns:searchFazLogResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getFazArchiveResponse">
+    <wsdl:part name="parameters" element="tns:getFazArchiveResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="removeFazArchiveResponse">
+    <wsdl:part name="parameters" element="tns:removeFazArchiveResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSystemStatusResponse">
+    <wsdl:part name="parameters" element="tns:getSystemStatusResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getFazConfigResponse">
+    <wsdl:part name="parameters" element="tns:getFazConfigResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setFazConfigResponse">
+    <wsdl:part name="parameters" element="tns:setFazConfigResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="runFazReportResponse">
+    <wsdl:part name="parameters" element="tns:runFazReportResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getDeviceVdomListResponse">
+    <wsdl:part name="parameters" element="tns:getDeviceVdomListResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getScriptResponse">
+    <wsdl:part name="parameters" element="tns:getScriptResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TooManyEntriesException">
+    <wsdl:part name="TooManyEntriesException" element="tns:TooManyEntriesFault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteScript">
+    <wsdl:part name="parameters" element="tns:deleteScript">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="runScript">
+    <wsdl:part name="parameters" element="tns:runScript"/>
+  </wsdl:message>
+  <wsdl:message name="runScriptResponse">
+    <wsdl:part name="parameters" element="tns:runScriptResponse"/>
+  </wsdl:message>
+  <wsdl:message name="installConfig">
+    <wsdl:part name="parameters" element="tns:installConfig"/>
+  </wsdl:message>
+  <wsdl:message name="installConfigResponse">
+    <wsdl:part name="parameters" element="tns:installConfigResponse"/>
+  </wsdl:message>
+  <wsdl:message name="getInstlog">
+    <wsdl:part name="parameters" element="tns:getInstlog"/>
+  </wsdl:message>
+  <wsdl:message name="getInstlogResponse">
+    <wsdl:part name="parameters" element="tns:getInstlogResponse"/>
+  </wsdl:message>
+  <wsdl:message name="revertConfig">
+    <wsdl:part name="parameters" element="tns:revertConfig"/>
+  </wsdl:message>
+  <wsdl:message name="revertConfigResponse">
+    <wsdl:part name="parameters" element="tns:revertConfigResponse"/>
+  </wsdl:message>
+  <wsdl:message name="getTCLRootFile">
+    <wsdl:part name="parameters" element="tns:getTCLRootFile"/>
+  </wsdl:message>
+  <wsdl:message name="getTCLRootFileResponse">
+    <wsdl:part name="parameters" element="tns:getTCLRootFileResponse"/>
+  </wsdl:message>
+  <wsdl:message name="getScriptLogSummary">
+    <wsdl:part name="parameters" element="tns:getScriptLogSummary"/>
+  </wsdl:message>
+  <wsdl:message name="getScriptLogSummaryResponse">
+    <wsdl:part name="parameters" element="tns:getScriptLogSummaryResponse"/>
+  </wsdl:message>
+  <wsdl:message name="getScriptLog">
+    <wsdl:part name="parameters" element="tns:getScriptLog"/>
+  </wsdl:message>
+  <wsdl:message name="getScriptLogResponse">
+    <wsdl:part name="parameters" element="tns:getScriptLogResponse"/>
+  </wsdl:message>
+  <wsdl:message name="getDeviceLicenseList">
+    <wsdl:part name="parameters" element="tns:getDeviceLicenseList"/>
+  </wsdl:message>
+  <wsdl:message name="getDeviceLicenseListResponse">
+    <wsdl:part name="parameters" element="tns:getDeviceLicenseListResponse"/>
+  </wsdl:message>
+  <wsdl:message name="importPolicy">
+    <wsdl:part name="parameters" element="tns:importPolicy"/>
+  </wsdl:message>
+  <wsdl:message name="importPolicyResponse">
+    <wsdl:part name="parameters" element="tns:importPolicyResponse"/>
+  </wsdl:message>
+  <wsdl:message name="addPolicyPackage">
+    <wsdl:part name="parameters" element="tns:addPolicyPackage"/>
+  </wsdl:message>
+  <wsdl:message name="addPolicyPackageResponse">
+    <wsdl:part name="parameters" element="tns:addPolicyPackageResponse"/>
+  </wsdl:message>
+  <wsdl:message name="assignGlobalPolicy">
+    <wsdl:part name="parameters" element="tns:assignGlobalPolicy"/>
+  </wsdl:message>
+  <wsdl:message name="assignGlobalPolicyResponse">
+    <wsdl:part name="parameters" element="tns:assignGlobalPolicyResponse"/>
+  </wsdl:message>
+  <wsdl:message name="addWTP">
+    <wsdl:part name="parameters" element="tns:addWTP"/>
+  </wsdl:message>
+  <wsdl:message name="addWTPResponse">
+    <wsdl:part name="parameters" element="tns:addWTPResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="FortiManagerWSPortType">
+    <wsdl:operation name="createScript">
+      <wsdl:input name="createScript" message="tns:createScript">
+      </wsdl:input>
+      <wsdl:output name="createScriptResponse" message="tns:createScriptResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getConfig">
+      <wsdl:input name="getConfig" message="tns:getConfig">
+      </wsdl:input>
+      <wsdl:output name="getConfigResponse" message="tns:getConfigResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteScript">
+      <wsdl:input name="deleteScript" message="tns:deleteScript">
+      </wsdl:input>
+      <wsdl:output name="deleteScriptResponse" message="tns:deleteScriptResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addAdom">
+      <wsdl:input name="addAdom" message="tns:addAdom">
+      </wsdl:input>
+      <wsdl:output name="addAdomResponse" message="tns:addAdomResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDeviceList">
+      <wsdl:input name="getDeviceList" message="tns:getDeviceList">
+      </wsdl:input>
+      <wsdl:output name="getDeviceListResponse" message="tns:getDeviceListResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listFazGeneratedReports">
+      <wsdl:input name="listFazGeneratedReports" message="tns:listFazGeneratedReports">
+      </wsdl:input>
+      <wsdl:output name="listFazGeneratedReportsResponse" message="tns:listFazGeneratedReportsResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getFazGeneratedReport">
+      <wsdl:input name="getFazGeneratedReport" message="tns:getFazGeneratedReport">
+      </wsdl:input>
+      <wsdl:output name="getFazGeneratedReportResponse" message="tns:getFazGeneratedReportResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="searchFazLog">
+      <wsdl:input name="searchFazLog" message="tns:searchFazLog">
+      </wsdl:input>
+      <wsdl:output name="searchFazLogResponse" message="tns:searchFazLogResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getFazArchive">
+      <wsdl:input name="getFazArchive" message="tns:getFazArchive">
+      </wsdl:input>
+      <wsdl:output name="getFazArchiveResponse" message="tns:getFazArchiveResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="removeFazArchive">
+      <wsdl:input name="removeFazArchive" message="tns:removeFazArchive">
+      </wsdl:input>
+      <wsdl:output name="removeFazArchiveResponse" message="tns:removeFazArchiveResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getSystemStatus">
+      <wsdl:input name="getSystemStatus" message="tns:getSystemStatus">
+      </wsdl:input>
+      <wsdl:output name="getSystemStatusResponse" message="tns:getSystemStatusResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getFazConfig">
+      <wsdl:input name="getFazConfig" message="tns:getFazConfig">
+      </wsdl:input>
+      <wsdl:output name="getFazConfigResponse" message="tns:getFazConfigResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setFazConfig">
+      <wsdl:input name="setFazConfig" message="tns:setFazConfig">
+      </wsdl:input>
+      <wsdl:output name="setFazConfigResponse" message="tns:setFazConfigResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="runFazReport">
+      <wsdl:input name="runFazReport" message="tns:runFazReport">
+      </wsdl:input>
+      <wsdl:output name="runFazReportResponse" message="tns:runFazReportResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDeviceVdomList">
+      <wsdl:input name="getDeviceVdomList" message="tns:getDeviceVdomList">
+      </wsdl:input>
+      <wsdl:output name="getDeviceVdomListResponse" message="tns:getDeviceVdomListResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAdomList">
+      <wsdl:input name="getAdomList" message="tns:getAdomList">
+      </wsdl:input>
+      <wsdl:output name="getAdomListResponse" message="tns:getAdomListResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listRevisionId">
+      <wsdl:input name="listRevisionId" message="tns:listRevisionId">
+      </wsdl:input>
+      <wsdl:output name="listRevisionIdResponse" message="tns:listRevisionIdResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="editGroupMembership">
+      <wsdl:input name="editGroupMembership" message="tns:editGroupMembership">
+      </wsdl:input>
+      <wsdl:output name="editGroupMembershipResponse" message="tns:editGroupMembershipResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="editAdom">
+      <wsdl:input name="editAdom" message="tns:editAdom">
+      </wsdl:input>
+      <wsdl:output name="editAdomResponse" message="tns:editAdomResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addGroup">
+      <wsdl:input name="addGroup" message="tns:addGroup">
+      </wsdl:input>
+      <wsdl:output name="addGroupResponse" message="tns:addGroupResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addDevice">
+      <wsdl:input name="addDevice" message="tns:addDevice">
+      </wsdl:input>
+      <wsdl:output name="addDeviceResponse" message="tns:addDeviceResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteAdom">
+      <wsdl:input name="deleteAdom" message="tns:deleteAdom">
+      </wsdl:input>
+      <wsdl:output name="deleteAdomResponse" message="tns:deleteAdomResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteGroup">
+      <wsdl:input name="deleteGroup" message="tns:deleteGroup">
+      </wsdl:input>
+      <wsdl:output name="deleteGroupResponse" message="tns:deleteGroupResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteDevice">
+      <wsdl:input name="deleteDevice" message="tns:deleteDevice">
+      </wsdl:input>
+      <wsdl:output name="deleteDeviceResponse" message="tns:deleteDeviceResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="retrieveConfig">
+      <wsdl:input name="retrieveConfig" message="tns:retrieveConfig">
+      </wsdl:input>
+      <wsdl:output name="retrieveConfigResponse" message="tns:retrieveConfigResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteConfigRev">
+      <wsdl:input name="deleteConfigRev" message="tns:deleteConfigRev">
+      </wsdl:input>
+      <wsdl:output name="deleteConfigRevResponse" message="tns:deleteConfigRevResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTaskList">
+      <wsdl:input name="getTaskList" message="tns:getTaskList">
+      </wsdl:input>
+      <wsdl:output name="getTaskListResponse" message="tns:getTaskListResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getGroupList">
+      <wsdl:input name="getGroupList" message="tns:getGroupList">
+      </wsdl:input>
+      <wsdl:output name="getGroupListResponse" message="tns:getGroupListResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPackageList">
+      <wsdl:input name="getPackageList" message="tns:getPackageList">
+      </wsdl:input>
+      <wsdl:output name="getPackageListResponse" message="tns:getPackageListResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDevices">
+      <wsdl:input name="getDevices" message="tns:getDevices">
+      </wsdl:input>
+      <wsdl:output name="getDevicesResponse" message="tns:getDevicesResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getGroups">
+      <wsdl:input name="getGroups" message="tns:getGroups">
+      </wsdl:input>
+      <wsdl:output name="getGroupsResponse" message="tns:getGroupsResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAdoms">
+      <wsdl:input name="getAdoms" message="tns:getAdoms">
+      </wsdl:input>
+      <wsdl:output name="getAdomsResponse" message="tns:getAdomsResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getScript">
+      <wsdl:input name="getScript" message="tns:getScript">
+      </wsdl:input>
+      <wsdl:output name="getScriptResponse" message="tns:getScriptResponse">
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getConfigRevisionHistory">
+      <wsdl:input name="getConfigRevisionHistory" message="tns:getConfigRevisionHistory">
+      </wsdl:input>
+      <wsdl:output name="getConfigRevisionHistoryResponse" message="tns:getConfigRevisionHistoryResponse">
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException" message="tns:TooManyEntriesException">
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException">
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="runScript">
+      <wsdl:input name="runScript" message="tns:runScript"/>
+      <wsdl:output name="runScriptResponse" message="tns:runScriptResponse"/>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException"/>
+    </wsdl:operation>
+    <wsdl:operation name="installConfig">
+      <wsdl:input name="installConfig" message="tns:installConfig"/>
+      <wsdl:output name="installConfigResponse" message="tns:installConfigResponse"/>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException"/>
+    </wsdl:operation>
+    <wsdl:operation name="getInstlog">
+      <wsdl:input name="getInstlog" message="tns:getInstlog"/>
+      <wsdl:output name="getInstlogResponse" message="tns:getInstlogResponse"/>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException"/>
+    </wsdl:operation>
+    <wsdl:operation name="revertConfig">
+      <wsdl:input name="revertConfig" message="tns:revertConfig"/>
+      <wsdl:output name="revertConfigResponse" message="tns:revertConfigResponse"/>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException"/>
+    </wsdl:operation>
+    <wsdl:operation name="getTCLRootFile">
+      <wsdl:input name="getTCLRootFile" message="tns:getTCLRootFile"/>
+      <wsdl:output name="getTCLRootFileResponse" message="tns:getTCLRootFileResponse"/>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException"/>
+    </wsdl:operation>
+    <wsdl:operation name="getScriptLogSummary">
+      <wsdl:input name="getScriptLogSummary" message="tns:getScriptLogSummary"/>
+      <wsdl:output name="getScriptLogSummaryResponse" message="tns:getScriptLogSummaryResponse"/>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException"/>
+    </wsdl:operation>
+    <wsdl:operation name="getDeviceLicenseList">
+      <wsdl:input name="getDeviceLicenseList" message="tns:getDeviceLicenseList"/>
+      <wsdl:output name="getDeviceLicenseListResponse" message="tns:getDeviceLicenseListResponse"/>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException"/>
+    </wsdl:operation>
+    <wsdl:operation name="importPolicy">
+      <wsdl:input name="importPolicy" message="tns:importPolicy"/>
+      <wsdl:output name="importPolicyResponse" message="tns:importPolicyResponse"/>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException"/>
+    </wsdl:operation>
+    <wsdl:operation name="addPolicyPackage">
+      <wsdl:input name="addPolicyPackage" message="tns:addPolicyPackage"/>
+      <wsdl:output name="addPolicyPackageResponse" message="tns:addPolicyPackageResponse"/>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException"/>
+    </wsdl:operation>
+    <wsdl:operation name="assignGlobalPolicy">
+      <wsdl:input name="assignGlobalPolicy" message="tns:assignGlobalPolicy"/>
+      <wsdl:output name="assignGlobalPolicyResponse" message="tns:assignGlobalPolicyResponse"/>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException"/>
+    </wsdl:operation>
+    <wsdl:operation name="addWTP">
+      <wsdl:input name="addWTP" message="tns:addWTP"/>
+      <wsdl:output name="addWTPResponse" message="tns:addWTPResponse"/>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException"/>
+    </wsdl:operation>
+    <wsdl:operation name="getScriptLog">
+      <wsdl:input name="getScriptLog" message="tns:getScriptLog"/>
+      <wsdl:output name="getScriptLogResponse" message="tns:getScriptLogResponse"/>
+      <wsdl:fault name="InvalidServicePassException" message="tns:InvalidServicePassException"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FortiManagerWSxml" type="tns:FortiManagerWSPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="createScript">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="createScript">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createScriptResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getConfig">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getConfig">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getConfigResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteScript">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="deleteScript">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteScriptResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDeviceList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getDeviceList">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDeviceListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listFazGeneratedReports">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="listFazGeneratedReports">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listFazGeneratedReportsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getFazGeneratedReport">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getFazGeneratedReport">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getFazGeneratedReportResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="searchFazLog">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="searchFazLog">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="searchFazLogResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getFazArchive">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getFazArchive">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getFazArchiveResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="removeFazArchive">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="removeFazArchive">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="removeFazArchiveResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getSystemStatus">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getSystemStatus">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getSystemStatusResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getFazConfig">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getFazConfig">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getFazConfigResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setFazConfig">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="setFazConfig">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="setFazConfigResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="runFazReport">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="runFazReport">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="runFazReportResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDeviceVdomList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getDeviceVdomList">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDeviceVdomListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAdomList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAdomList">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAdomListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listRevisionId">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="listRevisionId">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listRevisionIdResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="editGroupMembership">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="editGroupMembership">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="editGroupMembershipResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="editAdom">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="editAdom">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="editAdomResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addAdom">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="addAdom">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addAdomResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addGroup">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="addGroup">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addGroupResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addDevice">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="addDevice">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addDeviceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteAdom">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="deleteAdom">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteAdomResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteGroup">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="deleteGroup">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteGroupResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteDevice">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="deleteDevice">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteDeviceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="retrieveConfig">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="retrieveConfig">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="retrieveConfigResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteConfigRev">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="deleteConfigRev">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="deleteConfigRevResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTaskList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getTaskList">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTaskListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getGroupList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getGroupList">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getGroupListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPackageList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getPackageList">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPackageListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDevices">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getDevices">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDevicesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getGroups">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getGroups">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getGroupsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAdoms">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAdoms">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAdomsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getScript">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getScript">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getScriptResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getConfigRevisionHistory">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getConfigRevisionHistory">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getConfigRevisionHistoryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="TooManyEntriesException">
+        <soap:fault name="TooManyEntriesException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="runScript">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="runScript">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="runScriptResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="installConfig">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="installConfig">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="installConfigResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getInstlog">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getInstlog">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getInstlogResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="revertConfig">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="revertConfig">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="revertConfigResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTCLRootFile">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getTCLRootFile">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTCLRootFileResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getScriptLogSummary">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getScriptLogSummary">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getScriptLogSummaryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getScriptLog">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getScriptLog">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getScriptLogResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDeviceLicenseList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getDeviceLicenseList">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDeviceLicenseListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="importPolicy">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="importPolicy">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="importPolicyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addPolicyPackage">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="addPolicyPackage">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addPolicyPackageResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="assignGlobalPolicy">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="assignGlobalPolicy">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="assignGlobalPolicyResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addWTP">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="addWTP">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="addWTPResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidServicePassException">
+        <soap:fault name="InvalidServicePassException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+
+  </wsdl:binding>
+  <wsdl:service name="FortiManagerWSxml">
+    <wsdl:port name="FortiManagerWSxml" binding="tns:FortiManagerWSxml">
+      <soap:address location="http://localhost:8080/FortiManagerWSxml" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
