@@ -4,7 +4,8 @@ require 'time'
 
 ######################################################################################################################
 ## Version:: 0.9
-## Tested with:: FMG/FAZ 5.0.6 & 5.0.7
+## Tested with:: FMG/FAZ 5.0.7
+## Tested with:: Ruby 1.9.3 and Ruby 2.0.0
 ## Author:: Nick Petersen (2014)
 ## License:: Distributes under the same terms as Ruby
 ######################################################################################################################
@@ -275,7 +276,7 @@ class FmgApi
   ##  :rename                # rename :policy_package_name to :rename  (not set if not passed)
   ##  :clone_from            # when creating a new :policy_package_name you can clone from an existing (in same ADOM) with name specified in :clone_from
   ##
-  ## Optional_Arguments(ARG2-ArrayOfHashes)  (This may actually be a single hash for one install target or array of hashes for multiple)
+  ## Optional_Arguments(ARG2-ArrayOfHashes)  (This may be a single hash for one install target or array of hashes for multiple)
   ##
   ## Example-1:  (adding multiple vdoms via ArrayOfHashes to package install targets)
   ##  myinstalltargets = Array.new
