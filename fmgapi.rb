@@ -87,34 +87,47 @@ class FmgApi
   end
 
   ################################################################################################
-  ## add_adom Returns Hash (with FMG error_code and error_msgwhen successful) or RunTimeError (if not successful)
+  ## add_adom Returns Hash (with FMG error_code and error_msg, when successful) or Error (if not successful)
   ##
-  ## Adds an ADOM to FortiManager or FortiAnalyzer.  You can also optionally add a +single+ VDOM to the new ADOM
-  ## however if you need to add multiple VDOMs to the ADOM you should create the ADOM here then add the VDOMs to
-  ## the ADOM with iterations of the edit_adom method for each VDOM that you need to add to the ADOM.
+  ## Adds an ADOM to FortiManager or FortiAnalyzer.
   ##
-  ## +Usage:+
-  ##  add_adom(:name => 'new-adom-name')
+  ## Takes up to 2 arguments of types 1=hash, 2=(hash or array of hashes or false)
   ##
-  ## +Optional_Arguments:+
-  ##  :version            # defaults to 500 if not specified  (aka 5.0.0)
-  ##  :mr                 # defaults to 0 if not specified  (must also specify :version if you specify :mr)
-  ##  :is_backup_mode     # 0 = normal mode, 1 = backup mode.  Defaults to 0
-  ##  :vpn_management     # currently not working, only can default to Central VPN Console at this time (won't be processed in this version)
+  ## +Argument_1:+ is of type Hash with following required (R) and optional (O)
+  ##  (R) :name               # Name of ADOM to edit
+  ##  (O) :is_backup_mode     # 0=no, 1=yes, default=no
+  ##  (O) :version            # Version to set   (example: '500')
+  ##  (O) :mr                 # Major Release Version to set   (example '0')
   ##
-  ## Add VDOM with new ADOM Optional Argument Combinations:
-  ##  # None or one of the following argument combinations
-  ##  :serial_number and :vdom_name
-  ##  :serial_number and :vdom_id
-  ##  :dev_id and :vdom_name
-  ##  :dev_id and :vdom_id
+  ## +Argument_2:+ is optional and is of type Hash (for single device entry) or type Array of Hashes (for multiple device entries)
+  ## Specifies devices/vdoms to add to this ADOM.  If you need to pass the 3rd argument for meta data but not pass any devices
+  ## then you should just put false in the place of this argument.
+  ## Hash or Hashes must be specified with one of the following parameter combinations:
+  ##  {:serial_number => 'serial-num', :vdom_name => 'vdom-name'}
+  ##  {:serial_number => 'serial-num', :vdom_id => 'vdom-id'}
+  ##  {:dev_id => 'device-id', :vdom_name => 'vdom-name'}
+  ##  {:dev_id => 'device-id', :vdom_id => 'vdom-id'}
+  ##
+  ##
+  ## +Example1:+ (add a new ADOM)
+  ##  add_adom({:name => 'adomA'})
+  ##
+  ## +Example2:+ (add ADOM and assign single VDOM to the new ADOM)
+  ##  add_adom({:name => 'adomA'}, {:serial_number => 'FGVM11111111', :vdom_name => 'vdomA'})
+  ##
+  ## +Example3:+ (add new ADOM and assign multiple VDOMs to the ADOM)
+  ##  newdevices = Array.new
+  ##  newdevices[0] = {:serial_number => 'FGVM11111111', :vdom_name => 'vdomA'}
+  ##  newdevices[1] = {:serial_number => 'FGVM11111111', :vdom_name => 'vdomB'}
+  ##  newdevices[2] = {:serial_number' => 'FGVM22222222, :vdom_name => 'vdomC'}
+  ##  newdevices[3] = {:dev_id => '234', :vdom_name => 'vdomD'}
+  ##  newdevices[4] = {:dev_id => '234', :vdom_id => '2178'}
+  ##  add_adom({:name => 'adomA'}, newdevices)
   ################################################################################################
-  def add_adom(opts = {})
+  def add_adom(opts = {}, devices=false)
     querymsg = @authmsg
-    querymsg[:version] = opts[:version] ? opts[:version] : '500'
-    querymsg[:mr] = opts[:mr] ? opts[:mr] : '0'
     querymsg[:is_backup_mode] = opts[:is_backup_mode] ? opts[:is_backup_mode] : '0'
-    #querymsg[:VPN_management] = opts[:vpn_management] ? opts[:vpn_management] : 'Policy & Device VPNs'
+    #querymsg[:VPN_management] = opts[:vpn_management] ? opts[:vpn_management] : '0'
 
     begin
       if opts[:name]
@@ -123,34 +136,75 @@ class FmgApi
         raise ArgumentError.new('Must provide required arguments for method-> :name')
       end
 
-      ## If the optional :mr argument is passed, for safety we require that :version is also passed.
-      if opts[:mr] && !opts[:version]
-        raise ArgumentError.new('Must provide required arguments for method-> :version must also be passed if :mr is passed')
+      ## If the optional :mr argument is passed, for safety we require that :version is also passed.  If neither is set
+      ## we will default it as it is required parameter.
+      if opts[:mr] && opts[:version]
+        querymsg[:version] = opts[:version]
+        querymsg[:mr] = opts[:mr]
+      elsif opts[:version] && !opts[:mr]
+        raise ArgumentError.new('If you specify :version you must also specify :mr')
+      elsif opts[:mr] && !opts[:version]
+        raise ArgumentError.new('If you specify :mr you must also specify :version')
+      else
+        querymsg[:version] = '500'
+        querymsg[:mr] = '0'
       end
 
-      # Process optional single VDOM to add to this ADOM
-      # if more than one VDOM/Device need to be added to this new ADOM
-      # then you should use edit_adom method to add them each individually
-      if opts[:serial_number] && opts[:vdom_name]
-        querymsg[:device_sN_vdom] = {}
-        querymsg[:device_sN_vdom]['SN'] = opts[:serial_number]
-        querymsg[:device_sN_vdom][:vdom_name] = opts[:vdom_name]
-      elsif opts[:serial_number] && opts[:vdom_id]
-        querymsg[:device_sN_vdom] = {}
-        querymsg[:device_sN_vdom]['SN'] = opts[:serial_number]
-        querymsg[:device_sN_vdom][:vdom_iD] = opts[:vdom_id]
-      elsif opts [:dev_id] && opts[:vdom_name]
-        querymsg[:device_iD_vdom] = {}
-        querymsg[:device_iD_vdom]['ID'] = opts[:dev_id]
-        querymsg[:device_iD_vdom][:vdom_name] = opts[:vdom_name]
-      elsif opts[:dev_id] && opts[:vdom_id]
-        querymsg[:device_iD_vdom] = {}
-        querymsg[:device_iD_vdom]['ID'] = opts[:dev_id]
-        querymsg[:device_iD_vdom][:vdom_iD] = opts[:vdom_id]
-      elsif opts[:serial_number] || opts[:dev_id] || opts[:vdom_name] || opts[:vdom_id]
-        raise ArgumentError.new('Must provide required arguments for method-> did not provide all required arguments for adding VDOM to new ADOM, exiting without adding VDOM or ADOM')
+      # Check if the target devices was passed in.  If so add the target devices tags to the query.s
+      if devices.is_a?(Array)
+        ## If multiple devices are passed in through the array then we may have duplicate tags that need to be added
+        ## to the query.  Hashes cannont handle duplicate tags (aka keys) so we must convert to a string of xml and add
+        ## the parameters to the string as xml attributes instead.
+        querymsgxml = Gyoku.xml(querymsg)
+        devices.each { |x|
+          if (x[:serial_number] || x[:dev_id]) && (x[:vdom_name] || x[:vdom_id])
+            querymsgxml += '<deviceSNVdom>' + Gyoku.xml(x) if x[:serial_number]
+            querymsgxml += '<deviceIDVdom>' + Gyoku.xml(x) if x[:dev_id] && !x[:serial_number]
+
+            # The FMG API +sometimes+ capitalizes not just the letters between words (addDeviceIdVdom) but instead requires
+            # in +some+ instanaces that two or more letters sequentially be capitalized (addDeviceIDVDom).  Normal camel case
+            # processing usually takes care of this for us in instances where just first letter after an _ should be capital
+            # but we don't want to force capitalizing only one or two letters in any otherwise lowercase :symbol so we adjust
+            # the casing here using gsub
+            querymsgxml = querymsgxml.gsub(/deviceIdVdom/, 'deviceIDVdom')
+            querymsgxml = querymsgxml.gsub(/deviceSnVdom/, 'deviceSNVdom')
+            querymsgxml = querymsgxml.gsub(/serialNumber/, 'SN')
+            querymsgxml = querymsgxml.gsub(/devId/, 'ID')
+            querymsgxml = querymsgxml.gsub(/vdomId/, 'vdomID')
+
+            querymsgxml += '</deviceSNVdom>' if x[:serial_number]
+            querymsgxml += '</deviceIDVdom>' if x[:dev_id] && !x[:serial_number]
+          else
+            raise ArgumentError.new('Must provide required arguments within the \"devices\" Array/Hash argument-> the 2nd argument (for devices to add) must contain (:serial_number or :dev_id) AND (:vdom_name or :vdom_id')
+          end
+        }
+      elsif devices.is_a?(Hash)
+        if devices[:serial_number] && devices[:vdom_name]
+          querymsg[:device_sN_vdom] = {}
+          querymsg[:device_sN_vdom][:serial_number] = devices[:serial_number]
+          querymsg[:device_sN_vdom][:vdom_name] = devices[:vdom_name]
+        elsif devices[:serial_number] && devices[:vdom_id]
+          querymsg[:device_sN_vdom] = {}
+          querymsg[:device_sN_vdom][:serial_number] = devices[:serial_number]
+          querymsg[:device_sN_vdom][:vdom_id] = devices[:vdom_id]
+        elsif devices[:dev_id] && devices[:vdom_name]
+          querymsg[:device_iD_vdom] = {}
+          querymsg[:device_iD_vdom][:iD] = devices[:dev_id]
+          querymsg[:device_iD_vdom][:vdom_name] = devices[:vdom_name]
+        elsif devices[:dev_id] && devices[:vdom_id]
+          querymsg[:device_iD_vdom] = {}
+          querymsg[:device_iD_vdom][:serial_number] = devices[:dev_id]
+          querymsg[:device_iD_vdom][:vdom_id] = devices[:vdom_id]
+        else
+          raise ArgumentError.new('Must provide required arguments for method-> the 2nd argument (for devices to add) to add must contain :serial_number & (:vdom_name or :vdom_id')
+        end
       end
-      exec_soap_query(:add_adom,querymsg,:add_adom_response,:error_msg)
+
+      if querymsgxml
+        exec_soap_query(:add_adom,querymsgxml,:add_adom_response,:error_msg)
+      else
+        exec_soap_query(:add_adom,querymsg,:add_adom_response,:error_msg)
+      end
     rescue Exception => e
       fmg_rescue(e)
       return e
@@ -338,6 +392,7 @@ class FmgApi
             raise ArgumentError.new('Install target was passed but at least one of target hashes did not have one of top-level keys, either :grp or :dev')
           end
         }
+        querymsgxml += '</packageInstallTarget>'
       elsif install_targets.is_a?(Hash)
         querymsgxml = Gyoku.xml(querymsg) + '<packageInstallTarget>'
         if install_targets[:grp]
@@ -346,6 +401,7 @@ class FmgApi
           else
             raise ArgumentError.new('Install target was passed with hash key :grp but did not contain one of sub keys :oid or :name')
           end
+        querymsgxml += '</packageInstallTarget>'
         elsif install_targets[:dev]
           if install_targets[:dev][:oid] || install_targets[:dev][:name] || install_targets[:dev][:vdom]
             if install_targets[:dev][:vdom]
@@ -356,7 +412,7 @@ class FmgApi
               end
             else
               if x[:dev][:vdom] || opts[:fg_is_not_vdom_mode] == '1'
-                querymsgxml += gyoku.xml(install_targets)
+                querymsgxml += Gyoku.xml(install_targets)
               else
                 raise ArgumentError.new('One or more targets is a device and not a vdom while :fg_is_not_vdom_mode was not set to 1')
               end
@@ -368,7 +424,6 @@ class FmgApi
       end
 
       if querymsgxml
-        querymsgxml += '</packageInstallTarget>'
         exec_soap_query(:add_policy_package,querymsgxml,:add_policy_package_response,:policy_package_oid)
       else
         exec_soap_query(:add_policy_package,querymsg,:add_policy_package_response,:policy_package_oid)
@@ -379,6 +434,459 @@ class FmgApi
     end
   end
   alias :edit_policy_package :add_policy_package
+
+  ################################################################################################
+  ## assign_global_policy Returns Nori::StringWithAttributes (string contains task ID of process)
+  ##
+  ## Assigns a global policy package to ADOMs or specific packages inside of ADOM.  (Note: specific package assignment does
+  ## not seem to be working as of 5.0.7.  Additionally, Assignment doesn't show up under the global package assignments tab
+  ## even when successful, although you will see the global rules in the target packages themselves.)
+  ##
+  ## +Usage:+
+  ##  assign_global_policy({}:policy_package_name}, *hash-or-array-of-hashses)
+  ##
+  ## :policy_package_name is name of global policy package to assign
+  ## *hash-or-array-of-hashes defines the target ADOM and packages and contains the following parameter syntax per hash
+  ## {:name => 'target-adom-name', pkg => {:oid => 'oid-of-target-packages-in-adom'}}
+  ##
+  ## +Optional-Arguments:+
+  ##  :all_objects  # Add all global package objects to local policy regardless of use in policy? 0=no, 1=yes, default=no
+  ##  :install_to_device # Install to device after package assignment: 0=no, 1=yes, default=no
+  ##  :check_assignd_dup # Check for duplicate global policy assignments:  0=no, 1=yes, default=no
+  ##
+  ## Example1: (with single adom/package targets passed as Hash)
+  ##  assign_global_policy(:policy_package_name => 'global-policy-1'}, {:name => 'adomA', :pkg => {:oid => '602'}})
+  ##
+  ## Example2:(with multiple adom/package targets passed as Array of Hashes)
+  ##  mytargetpkgs = Array.new
+  ##  mytargetpkgs[0] = {:name => 'adomA', :pkg => {:oid => '602'}}
+  ##  mytargetpkgs[1] = {:name => 'adomA', :pkg => {:oid => '603'}}
+  ##  mytargetpkgs[0] = {:name => 'adomB', :pkg => {:oid => '703'}}
+  ##  assign_global_policy({:policy_package_name => 'global-policy-1'}, mytargetpkgs)
+  ##
+  ## Example3: (with singe adom/package targets passed as hash and optional arguments)
+  ##  assign_global_policy(:policy_package_name => 'global-policy-1', :all_objects => '1', :install_to_device => '1'}, {:name => 'adomA', :pkg => {:oid => '602'}})
+  ################################################################################################
+  def assign_global_policy(opts = {}, targets=false)
+    querymsg = @authmsg
+    querymsg[:adom] = opts[:adom] ? opts[:adom] : 'Global'
+    querymsg[:policy_package_name] =  opts[:policy_package_name] ? opts[:policy_package_name] : 'default'
+    querymsg[:all_objects] = opts[:all_objects] ? opts[:all_objects] : '0'
+    querymsg[:install_to_device] = opts[:install_to_device] ? opts[:install_to_device] : '0'
+    querymsg[:check_assignd_dup] = opts[:check_assignd_dup] ? opts[:check_assignd_dup] : '0'
+
+    begin
+      ## If we have more than one target, that will require multiple copies of identical tags which cannot be handled
+      ## when using Hash format for passing parameters to Savon.  So we instead convert to an XML based string first
+      ## then append our multiple entries to the string as XML.
+      if targets.is_a?(Array)
+        querymsgxml = Gyoku.xml(querymsg)
+        targets.each { |x|
+          if x[:name] && x[:pkg][:oid]
+            querymsgxml += '<adomList>' + Gyoku.xml(x) + '</adomList>'
+          else
+            raise ArgumentError.new('Target(s) array of hashes did not include elements :name and one of (:pkg->:oid or :pkg->:name)')
+          end
+        }
+      elsif targets.is_a?(Hash)
+          if targets[:name] && targets[:pkg][:oid]
+            querymsg[:adom_list] = {}
+            querymsg[:adom_list][:name] = targets[:name]
+            querymsg[:adom_list][:pkg] = {}
+            querymsg[:adom_list][:pkg][:oid] = targets[:pkg][:oid]
+          else
+            raise ArgumentError.new('Target(s) hash did not include elements :name and one of (:pkg->:oid or :pkg->:name)')
+          end
+      else
+        raise ArgumentError.new('Target package(s) detail must be passed as a Hash (for single target) or Array of Hashes (for multiple targets')
+      end
+
+      if querymsgxml
+        exec_soap_query(:assign_global_policy,querymsgxml,:assign_global_policy_response,:task_id)
+      else
+        exec_soap_query(:assign_global_policy,querymsg,:assign_global_policy_response,:task_id)
+      end
+
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+
+  ################################################################################################
+  ## create_script Returns Nori::StringWithAttributes (string contains 0 for success or 1 for failed)
+  ##
+  ## Creates a new script in the designated ADOM
+  ##
+  ## +Usage:+
+  ## create_script({:adom => 'adom-to-create-in, :name => 'name-of-script-to-create', :content => 'content-of-script-to-create'})
+  ##
+  ## +Optional_Arguments:+
+  ##  :type         # type of script options are CLI or TCL.  default=CLI
+  ##  :description  # description of script.   default='created via XML API'
+  ##  :overwrite    # if script name already exists overwrite?  0=no, 1=yes, default=no
+  ##  :is_global    # create this as a global script. 0=no, 1=yes, default=no.
+  #################################################################################################
+  def create_script(opts = {})
+    querymsg = @authmsg
+    querymsg[:is_global] = opts[:is_global] ? opts[:is_global] : '0'
+    querymsg[:type] = opts[:type] ? opts[:type] : 'CLI'
+    querymsg[:description] = opts[:description] ? opts[:description] : 'created via XML API'
+    querymsg[:overwrite] = opts[:overwrite] ? opts[:overwrite] : '0'
+
+    begin
+      if opts[:adom] && opts[:name] && opts[:content]
+        querymsg[:adom] =  opts[:adom]
+        querymsg[:name] = opts[:name]
+        querymsg[:content] = opts[:content]
+      else
+        raise ArgumentError.new('Must provide required arguments for method -> :adom, :name and :content')
+      end
+      exec_soap_query(:create_script,querymsg,:create_script_response,:return)
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+
+  ################################################################################################
+  ## delete_adom Returns Hash (if hash is return object then it was executed successfully)
+  ##
+  ## Deletes specified ADOM
+  ##
+  ## +Usage:+
+  ##  delete_adom(:adom_name => 'adom-name') OR
+  ##  delete_adom(:adom_oid => 'adom-oid')
+  ################################################################################################
+  def delete_adom(opts = {})
+    querymsg = @authmsg
+
+    begin
+      if opts[:adom_name]
+        querymsg[:adom_name] = opts[:adom_name]
+      elsif
+        querymsg[:adom_oid] = opts[:adom_oid]
+      else
+        raise ArgumentError.new('Must provide required arguments for method-> :adom_name OR adom_oid')
+      end
+      exec_soap_query(:delete_adom,querymsg,:delete_adom_response,:error_msg)
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+
+  ################################################################################################
+  ## delete_config_rev Returns Hash (if hash is return object then it was executed successfully)
+  ##
+  ## Deletes specified configuration revision
+  ## +Usage:+
+  ##  delete_config_rev({:serial_number => 'serial-number', :rev_name => 'revision-name'}) OR
+  ##  delete_config_rev({:serial_number => 'serial-number', :rev_id => 'revision-id'}) OR
+  ##  delete_config_rev({:dev_id => 'device-id', :rev_name => 'revision-name'}) OR
+  ##  delete_config_rev{{dev_id => 'device-id', :rev_id => 'revision-id'}}
+  ################################################################################################
+  def delete_config_rev(opts = {})
+    querymsg = @authmsg
+
+    begin
+      if opts[:dev_id]
+        querymsg[:dev_id] = opts[:dev_id]
+      elsif opts[:serial_number]
+        querymsg[:serial_number] = opts[:serial_number]
+      else
+        raise ArgumentError.new('Must provide required arguments for method-> :serial_number or :dev_id  (in addition to :rev_name or :rev_id')
+      end
+      if opts[:rev_name]
+        querymsg[:rev_name] = opts[:rev_name]
+      elsif opts[:rev_id]
+        querymsg[:rev_id] = opts[:rev_id]
+      else
+        raise ArgumentError.new('Must provide required arguments for method-> :rev_name or :rev_id (in addition to :serial_number or :dev_id')
+      end
+      exec_soap_query(:delete_config_rev,querymsg,:delete_config_rev_response,:error_msg)
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+
+  ################################################################################################
+  ## delete_device Nori::StringWithAttributes (string contains taskID of fmg delete device process. Must get results from task)
+  ##
+  ## Deletes specified device
+  ## +Usage:+
+  ##  delete_device({:serial_number => 'serial-number'}) OR
+  ##  delete_device({:dev_id => 'device-id'})
+  ################################################################################################
+  def delete_device(opts = {})
+    querymsg = @authmsg
+
+    begin
+      if opts[:dev_id]
+        querymsg[:dev_id] = opts[:dev_id]
+      elsif opts[:serial_number]
+        querymsg[:serial_number] = opts[:serial_number]
+      else
+        raise ArgumentError.new('Must provide required arguments for method-> :serial_number or :dev_id')
+      end
+      exec_soap_query(:delete_device,querymsg,:delete_device_response,:task_id)
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+
+  ################################################################################################
+  ## delete_group Returns Hash (if object type of Hash is returned then executed successfully)
+  ##
+  ## Deletes specified group
+  ## +Usage:+
+  ##  delete_group({:grp_name => 'group-name', :adom=> 'adom-name'}) OR
+  ##  delete_group({:grp_id => 'group-id', :adom => 'adom-name'})
+  ################################################################################################
+  def delete_group(opts = {})
+    querymsg = @authmsg
+
+    begin
+      if opts[:grp_name] && opts[:adom]
+        querymsg[:name] = opts[:grp_name]
+        querymsg[:adom] = opts[:adom]
+      elsif opts[:grp_id] && opts[:adom]
+        querymsg[:grp_id] = opts[:grp_id]
+        querymsg[:adom] = opts[:adom]
+      else
+        raise ArgumentError.new('Must provide required arguments for method-> (:grp_name or :grp_id) and :adom')
+      end
+      exec_soap_query(:delete_group,querymsg,:delete_group_response,:error_msg)
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+
+  ################################################################################################
+  ## delete_script
+  ##
+  ## Deletes specified script
+  ##
+  ## +Usage:+
+  ##  delete_script({:name => 'name-of-script'})
+  ##
+  ## +Optional_Arugments:+
+  ##  :type  #type of script.  CLI or TCL.  defaults to CLI
+  ################################################################################################
+  def delete_script(opts = {})
+    querymsg = @authmsg
+    querymsg[:type] = opts[:type] ? opts[:type] : 'CLI'
+
+    begin
+      if opts[:name]
+        querymsg[:name] = opts[:name]
+      else
+        raise ArgumentError.new('Must provide required arguments for method-> :name')
+      end
+      exec_soap_query(:delete_script,querymsg,:delete_script_response,:error_msg)
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+
+  ################################################################################################
+  ## edit_adom Returns Hash (with FMG error_code and error_msg when successful) or RunTimeError (if not successful)
+  ##
+  ## Edits specified ADOM.  Provides ability to change:  backup mode, vpn management, version, devices/adoms, or metadata
+  ##
+  ## Takes up to 3 arguments of types 1=hash, 2=(hash or array of hashes or false), 3=(hash or array of hashes)
+  ## +Argument_1:+ is of type Hash with following required (R) and optional (O)
+  ##  (R) :name               # Name of ADOM to edit
+  ##  (O) :is_backup_mode     # 0=no, 1=yes, default=no
+  ##  (O) :version            # Version to set   (example: '500')
+  ##  (O) :mr                 # Major Release Version to set   (example '0')
+  ##
+  ## +Argument_2:+ is optional and is of type Hash (for single device entry) or type Array of Hashes (for multiple device entries)
+  ##
+  ## Specifies devices/vdoms to add to this ADOM.  If you need to pass the 3rd argument for meta data but not pass any devices
+  ## then you should just put false in the place of this argument.
+  ## Hash or Hashes must be specified with one of the following parameter combinations:
+  ##  {:serial_number => 'serial-num', :vdom_name => 'vdom-name'}
+  ##  {:serial_number => 'serial-num', :vdom_id => 'vdom-id'}
+  ##  {:dev_id => 'device-id', :vdom_name => 'vdom-name'}
+  ##  {:dev_id => 'device-id', :vdom_id => 'vdom-id'}
+  ##
+  ## +Argument_3:+ is optional and is of type Hash (for single meta value entry) or as an Array of Hashes (for multiple meta entries)
+  ## Specifies meta data tags to edit on the ADOM. Hash(es) should be of the following format:
+  ##  {:name => 'meta-tag-name', :value => 'meta-tag-value'}
+  ##
+  ## +Example1:+ (change the backup mode to backup-mode)
+  ##  edit_adom({:name => 'adomA', :is_backup_mode => '1'}
+  ##
+  ## +Example2:+ (add a single vdom)
+  ##  edit_adom({:name => 'adomA'}, {:serial_number => 'FGVM11111111', :vdom_name => 'vdomA'})
+  ##
+  ## +Example3:+ (add multiple vdoms)
+  ##  newdevices = Array.new
+  ##  newdevices[0] = {:serial_number => 'FGVM11111111', :vdom_name => 'vdomA'}
+  ##  newdevices[1] = {:serial_number => 'FGVM11111111', :vdom_name => 'vdomB'}
+  ##  newdevices[2] = {:serial_number' => 'FGVM22222222, :vdom_name => 'vdomC'}
+  ##  newdevices[3] = {:dev_id => '234', :vdom_name => 'vdomD'}
+  ##  newdevices[4] = {:dev_id => '234', :vdom_id => '2178'}
+  ##  edit_adom({:name => 'adomA'}, newdevices)
+  ##
+  ## +Example4:+ (edit meta data but add no vdoms)
+  ##  newmetadata = Array.new
+  ##  newmetadata[0] = {:name => 'meta1', :value => 'value1'}
+  ##  newmetadata[1] = {:name => 'meta2', :value => 'value2'}
+  ##  edit_adom({:name => 'adomA'}, false, newmetadata)
+  ##
+  ## +Example5:+ (add single device/vdom and single meta data entry)
+  ##  edit_adom({:name => 'adomA'}, {:serial_number => 'FGVM11111111', :vdom_name => 'vdomA'}, {:name => 'meta1', value => 'value1'})
+  ################################################################################################
+  def edit_adom(opts = {}, devices=false, meta=false)
+    querymsg = @authmsg
+    querymsg[:is_backup_mode] = opts[:is_backup_mode] if opts[:is_backup_mode]
+    querymsg[:state] = opts[:state] if opts[:state]
+    querymsg[:vpn_management] = opts[:vpn_management] if opts[:vpn_management]
+
+    begin
+      if opts[:name]
+        querymsg[:name] = opts[:name]
+      else
+        raise ArgumentError.new('Must provide required arguments for method-> :name')
+      end
+
+      ## If the optional :mr argument is passed, for safety we require that :version is also passed.
+      if opts[:mr] && opts[:version]
+        querymsg[:version] = opts[:version] if opts[:version]
+        querymsg[:mr] = opts[:mr] if opts[:mr]
+      elsif opts[:mr] && !opts[:version]
+        raise ArgumentError.new('Argument error: provided :mr but not :version')
+      elsif opts[:version] && !opts[:mr]
+        raise ArgumentError.new('Argument error: provided :version but not :mr')
+      end
+
+      # Check if the target devices was passed in.  If so add the target devices tags to the query.s
+      if devices.is_a?(Array)
+        ## If multiple devices are passed in through the array then we may have duplicate tags that need to be added
+        ## to the query.  Hashes cannont handle duplicate tags (aka keys) so we must convert to a string of xml and add
+        ## the parameters to the string as xml attributes instead.
+        querymsgxml = Gyoku.xml(querymsg)
+        devices.each { |x|
+        if (x[:serial_number] || x[:dev_id]) && (x[:vdom_name] || x[:vdom_id])
+          querymsgxml += '<addDeviceSNVdom>' + Gyoku.xml(x) if x[:serial_number]
+          querymsgxml += '<addDeviceIDVdom>' + Gyoku.xml(x) if x[:dev_id] && !x[:serial_number]
+
+          # The FMG API +sometimes+ capitalizes not just the letters between words (addDeviceIdVdom) but instead requires
+          # in +some+ instanaces that two or more letters sequentially be capitalized (addDeviceIDVDom).  Normal camel case
+          # processing usually takes care of this for us in instances where just first letter after an _ should be capital
+          # but we don't want to force capitalizing only one or two letters in any otherwise lowercase :symbol so we adjust
+          # the casing here using gsub
+          querymsgxml = querymsgxml.gsub(/addDeviceIdVdom/, 'addDeviceIDVdom')
+          querymsgxml = querymsgxml.gsub(/addDeviceSnVdom/, 'addDeviceSNVdom')
+          querymsgxml = querymsgxml.gsub(/serialNumber/, 'SN')
+          querymsgxml = querymsgxml.gsub(/devId/, 'ID')
+          querymsgxml = querymsgxml.gsub(/vdomId/, 'vdomID')
+
+          querymsgxml += '</addDeviceSNVdom>' if x[:serial_number]
+          querymsgxml += '</addDeviceIDVdom>' if x[:dev_id] && !x[:serial_number]
+        else
+          raise ArgumentError.new('Must provide required arguments within the \"devices\" Array/Hash argument-> the 2nd argument (for devices to add) must contain (:serial_number or :dev_id) AND (:vdom_name or :vdom_id')
+        end
+        }
+      elsif devices.is_a?(Hash)
+          if devices[:serial_number] && devices[:vdom_name]
+            querymsg[:add_device_sN_vdom] = {}
+            querymsg[:add_device_sN_vdom][:serial_number] = devices[:serial_number]
+            querymsg[:add_device_sN_vdom][:vdom_name] = devices[:vdom_name]
+          elsif devices[:serial_number] && devices[:vdom_id]
+            querymsg[:add_device_sN_vdom] = {}
+            querymsg[:add_device_sN_vdom][:serial_number] = devices[:serial_number]
+            querymsg[:add_device_sN_vdom][:vdom_id] = devices[:vdom_id]
+          elsif devices[:dev_id] && devices[:vdom_name]
+            querymsg[:add_device_iD_vdom] = {}
+            querymsg[:add_device_iD_vdom][:iD] = devices[:dev_id]
+            querymsg[:add_device_iD_vdom][:vdom_name] = devices[:vdom_name]
+          elsif devices[:dev_id] && devices[:vdom_id]
+            querymsg[:add_device_iD_vdom] = {}
+            querymsg[:add_device_iD_vdom][:serial_number] = devices[:dev_id]
+            querymsg[:add_device_iD_vdom][:vdom_id] = devices[:vdom_id]
+          else
+            raise ArgumentError.new('Must provide required arguments for method-> the 2nd argument (for devices to add) to add must contain :serial_number & (:vdom_name or :vdom_id')
+          end
+      end
+
+      if meta.is_a?(Array)
+        querymsgxml = Gyoku.xml(querymsg) + '<metafields>' unless querymsgxml
+        meta.each { |x|
+          if x[:name]  && x[:value]
+            querymsgxml += '<metafield>' + Gyoku.xml(x) + '</metafield>'
+          else
+            raise ArgumentError.new('Must provide required arguments in \"metadata\" Hash/Array-> :name and :value')
+          end
+        }
+        querymsgxml += '</metafields>'
+      elsif meta.is_a?(Hash)
+        if meta[:name] && meta[:value]
+          querymsg[:metafields] = {:metafield => {:name => meta[:name], :value => meta[:value]}}
+        else
+          raise ArgumentError.new('Must provide required arguments in \"meta data\" Hash/Array-> :name and :value')
+        end
+      end
+
+      if devices.is_a?(Array) || meta.is_a?(Array)
+        exec_soap_query(:edit_adom,querymsgxml,:edit_adom_response,:error_msg)
+      else
+        exec_soap_query(:edit_adom,querymsg,:edit_adom_response,:error_msg)
+      end
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
+
+  ################################################################################################
+  ## edit_group_membership Returns
+  ##
+  ## Retrieves ADOM info for a specified ADOM name and returns a hash of  attributes
+  ##
+  ## +Usage:+
+  ##  get_adom_by_name() OR  # Note: If no parameter is passed defaults to 'root'
+  ##  get_adom_by_name(:adom => 'adom_name')
+  ################################################################################################
+  def edit_group_membership(opts = {})
+    querymsg = @authmsg
+    querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
+
+    begin
+      if opts[:grp_name]
+        querymsg[:name] = opts[:grp_name]
+      elsif opts[:grp_id]
+        querymsg[:grp_id]
+      else
+        raise ArgumentError.new('Must provide required arguments for method->  :grp_name or :grp_id')
+      end
+
+      unless opts[:add_device_sn_list] || opts[:add_device_id_list] || opts[:del_device_sn_list] || opts[:del_device_id_list] || opts[:add_group_name_list] || \
+       opts[:add_group_id_list] || opts[:del_group_name_list] || opts[:del_group_id_list]
+        raise ArgumentError.new('No changes to make were provided')
+      end
+
+      querymsg[:add_device_sN_list] = opts[:add_device_sn_list] if opts[:add_device_sn_list]
+      querymsg[:add_device_iD_list] = opts[:add_device_id_list] if opts[:add_device_id_list]
+      querymsg[:del_device_sN_list] = opts[:del_device_sn_list] if opts[:del_device_sn_list]
+      querymsg[:del_device_iD_list] = opts[:del_device_id_list] if opts[:del_device_id_list]
+      querymsg[:add_group_name_list] = opts[:add_group_name_list] if opts[:add_group_name_list]
+      querymsg[:add_group_iD_list] = opts[:add_group_iD_list] if opts[:add_group_iD_list]
+      querymsg[:del_group_name_list] = opts[:del_group_name_list] if opts[:del_group_name_list]
+      querymsg[:del_group_iD_list] = opts[:del_group_iD_list] if opts[:del_group_iD_list]
+
+      exec_soap_query(:edit_group_membership,querymsg,:edit_group_membership_response,:error_msg)
+    rescue Exception => e
+      fmg_rescue(e)
+      return e
+    end
+  end
 
   ################################################################################################
   ## get_adom_by_name Returns Hash
@@ -1053,7 +1561,6 @@ class FmgApi
     end
   end
 
-
   #####################################################################################################################
   ## install_conifg Returns Nori::StringWithAttributes (string contains taskID of associated task)
   ##
@@ -1431,6 +1938,10 @@ class FmgApi
     end
 
     begin
+      ## This is a hack because delete_script doesn't return in the same format as every other query
+      return '0' if responsetype == :delete_script_response
+      ##
+
       # Check for API error response and return error if exists
       if data[responsetype].has_key?(:error_msg)
         if data[responsetype][:error_msg][:error_code].to_i != 0
