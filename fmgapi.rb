@@ -3,7 +3,7 @@ require 'date'
 require 'time'
 
 ######################################################################################################################
-## Version:: 0.9
+## Version:: 0.1
 ## Tested with:: FMG/FAZ 5.0.7
 ## Tested with:: Ruby 1.9.3 and Ruby 2.0.0
 ## Author:: Nick Petersen (2014)
@@ -11,7 +11,7 @@ require 'time'
 ######################################################################################################################
 ## Summary::
 ## Provides simplified interaction with the Fortinet FortiManager/FortiAnalyzer XML API.  Class methods
-## are implemented to abstract the complexity in executing FMG XML API queries.
+## are implemented to abstract the complexity in executing FMG XML API queries via Ruby.
 ##
 ## Uses Savon Gem for SOAP query/response handling.  Most Savon initialization parameters are pre-set with values that
 ## are known to work with FortiManager and FortiAnalyzer.
@@ -29,7 +29,7 @@ require 'time'
 ## arguments passed in order.   This is because many methods have several optional arguments and in some cases required
 ## arguments can be left out if other required arguments are used.
 ##
-## When specifying hash key/values arguments to a method, use the following syntax:
+## When specifying hash key/value arguments to a method, use the following syntax:
 ##
 ## Single argument passed:
 ##  method_name(argument_key => 'argument_value')
