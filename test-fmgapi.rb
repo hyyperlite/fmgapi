@@ -11,7 +11,7 @@ require "nokogiri"
 opts = Trollop::options {
   version 'v0.1 (c) Nick Petersen'
   banner <<-EOS
-FortiManager API Access
+FortiManager XML API Access
 
 Usage:
     fmgmain [options] <filenames>+
@@ -39,16 +39,13 @@ fmglab1 = FmgApi.new(opts[:wsdl_file], 'https://1.1.1.3:8080', opts[:namespace],
 
 ################################################################################################################
 
-
-
-
-myresult = fmglab1.get_adom_list
+#myresult = fmgapi.get_adom_list
 # mydevices = Array.new
 # mydevices[0] = {:serial_number => 'FGVM020000018110', :vdom_name => 'D2'}
 # mydevices[1] = {:dev_id => '234', :vdom_id => '2298'}
 # mydevices[2] = {:dev_id => '234', :vdom_id => '3178'}
 #myresult = fmgapi.add_adom({:name => 'addAdomTest'}, mydevices)
-#myresult = fmglab1.add_adom({:name => 'addAdomTest'})
+#myresult = fmgapi.add_adom({:name => 'addAdomTest'})
 #myresult = fmgapi.add_adom({:name => 'apitest1', :serial_number => 'FGVM020000018111', :vdom_name => 'root'}) ## test adding vdom with adom using device sn
 #myresult = fmgapi.add_adom({:name => 'apitest1', :dev_id => '234', :vdom_name => 'root'}) ## test adding vdom with adom using device id
 #myresult = fmgapi.add_adom({:name => 'apitest1', :serial_number => 'FGVM020000018111', :vdom_id => '3', :mr => '1'}) ## :test for mr specified without :version
@@ -72,7 +69,7 @@ myresult = fmglab1.get_adom_list
 #myresult = fmgapi.assign_global_policy({:policy_package_name => 'Test'}, {:name => 'root', :pkg => {:oid => '602'}})
 
 #myresult = fmgapi.create_script({:adom => 'root', :name=>'apitest1', :content => "get sys status\nconfig global\nget gui console status \n"})
-#myresult = fmgapi.delete_adom(:adom_name => 'adomtest')
+#myresult = fmgapi.delete_adom(:adom_name => 'quarantine')
 #myresult = fmgapi.delete_adom(:adom_oid => '301')
 #myresult = fmgapi.delete_config_rev({:dev_id => '234', :rev_id => '4'})
 #myresult = fmg100c.delete_device(:serial_number => 'FWF60D4613000043')
@@ -89,7 +86,7 @@ myresult = fmglab1.get_adom_list
 #mymeta[1] = {:name => 'meta2', :value => 'value2'}
 #myresult = fmgapi.edit_adom({:name => 'apitest1'}, mydevices)
 #myresult = fmgapi.edit_adom({:name => 'apitest1'}, false, mymeta)
-#myresult = fmgapi.edit_adom({:name => 'apitest1', :version => '400', :mr => '2'})
+#myresult = fmgapi.edit_adom({:name => 'customerA', :version => '500', :mr => '2'})
 #myresult = fmgapi.edit_group_membership(:adom => 'root', :grp_name => 'editGroupTest', :add_group_name_list => 'subGroupTest1, subGroupTest2' )
 #myresult = fmgapi.get_adom_by_name(:adom => 'customerA')
 #myresult = fmgapi.get_adom_by_oid(:adom_id => '152')
@@ -104,7 +101,7 @@ myresult = fmglab1.get_adom_list
 #myresult = fazapi.get_faz_archive({:adom => 'root', :dev_id => 'FWF60D4613000043', :file_name => '1712625325:0', :type => '6'})
 #myresult = fazapi.get_faz_archive({:dev_id => 'FWF60D4613000043', :file_name => '1712625325:0', :type => '6'})
 #myresult = fazapi.get_faz_config
-#myresult = fmgapi.get_fmg_config
+myresult = fmgapi.get_fmg_config
 #myresult = fazapi.get_faz_generated_report   ### Doesn't work yet, issues with finding report name
 #myresult = fmg100c.get_group_list(:adom => 'root')
 #myresult = fmgapi.get_group({:groupid => '101', :name => 'All_FortiGate', :adom=>'customerA'})

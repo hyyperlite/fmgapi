@@ -1,6 +1,7 @@
 require 'savon'
 require 'date'
 require 'time'
+require 'gyoku'
 
 ######################################################################################################################
 ## Version:: 0.1
@@ -564,7 +565,7 @@ class FmgApi
     begin
       if opts[:adom_name]
         querymsg[:adom_name] = opts[:adom_name]
-      elsif
+      elsif opts[:adom_oid]
         querymsg[:adom_oid] = opts[:adom_oid]
       else
         raise ArgumentError.new('Must provide required arguments for method-> :adom_name OR adom_oid')
