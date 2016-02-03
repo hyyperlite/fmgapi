@@ -151,10 +151,10 @@ class FmgApi
         querymsg[:mr] = '0'
       end
 
-      # Check if the target devices was passed in.  If so add the target devices tags to the query.s
+      # Check if the target devices was passed in.  If so add the target devices tags to the query.
       if devices.is_a?(Array)
         ## If multiple devices are passed in through the array then we may have duplicate tags that need to be added
-        ## to the query.  Hashes cannont handle duplicate tags (aka keys) so we must convert to a string of xml and add
+        ## to the query.  Hashes cannot handle duplicate tags (aka keys) so we must convert to a string of xml and add
         ## the parameters to the string as xml attributes instead.
         querymsgxml = Gyoku.xml(querymsg)
         devices.each { |x|
@@ -163,7 +163,7 @@ class FmgApi
             querymsgxml += '<deviceIDVdom>' + Gyoku.xml(x) if x[:dev_id] && !x[:serial_number]
 
             # The FMG API +sometimes+ capitalizes not just the letters between words (addDeviceIdVdom) but instead requires
-            # in +some+ instanaces that two or more letters sequentially be capitalized (addDeviceIDVDom).  Normal camel case
+            # in +some+ instances that two or more letters sequentially be capitalized (addDeviceIDVDom).  Normal camel case
             # processing usually takes care of this for us in instances where just first letter after an _ should be capital
             # but we don't want to force capitalizing only one or two letters in any otherwise lowercase :symbol so we adjust
             # the casing here using gsub
@@ -779,7 +779,7 @@ class FmgApi
           querymsgxml += '<addDeviceIDVdom>' + Gyoku.xml(x) if x[:dev_id] && !x[:serial_number]
 
           # The FMG API +sometimes+ capitalizes not just the letters between words (addDeviceIdVdom) but instead requires
-          # in +some+ instanaces that two or more letters sequentially be capitalized (addDeviceIDVDom).  Normal camel case
+          # in +some+ instanaces that two or more letters sequentially be capitalized (addDeviceIDVDom).  Normal camelcase
           # processing usually takes care of this for us in instances where just first letter after an _ should be capital
           # but we don't want to force capitalizing only one or two letters in any otherwise lowercase :symbol so we adjust
           # the casing here using gsub
