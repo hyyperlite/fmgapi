@@ -3,7 +3,7 @@ require_relative '../ah2hh/ah2hh'
 require 'trollop'
 require 'base64'
 require 'nori'
-require "nokogiri"
+require 'nokogiri'
 
 #######################################
 ###### Options Handling ###############
@@ -26,8 +26,8 @@ where [options] are:
   opt :file, 'Configuration File', :type => String
 }
 
-#puts "Executing with the following options:"
-#opts.each { |x| puts "#{x}"}
+puts "Executing with the following options:"
+opts.each { |x| puts "#{x}"}
 
 #####################################
 ##### Execution #####################
@@ -39,7 +39,7 @@ fmglab1 = FmgApi.new(opts[:wsdl_file], 'https://1.1.1.3:8080', opts[:namespace],
 
 ################################################################################################################
 
-#myresult = fmgapi.get_adom_list
+myresult = fmgapi.get_adom_list
 # mydevices = Array.new
 # mydevices[0] = {:serial_number => 'FGVM020000018110', :vdom_name => 'D2'}
 # mydevices[1] = {:dev_id => '234', :vdom_id => '2298'}
