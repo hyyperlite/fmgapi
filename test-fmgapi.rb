@@ -32,7 +32,7 @@ where [options] are:
 uri = URI(opts[:fmg_api_url])
 scheme = uri.scheme
 
-Trollop::die :fmg_api_url, 'Did not provide a valid url (be sure to include the http:// or https://)' unless %w(http https).include?(scheme)
+Trollop::die :fmg_api_url, 'Did not provide a valid url, (be sure to include the http:// or https://)' unless %w(http https).include?(scheme)
 Trollop::die :wsdl_file, 'file does not exist' unless File.exist?(opts[:wsdl_file]) if opts[:wsdl_file]
 
 puts "Executing with the following options:"
