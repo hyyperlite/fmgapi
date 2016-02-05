@@ -4,27 +4,36 @@ require 'trollop'
 require 'base64'
 require 'nori'
 require 'nokogiri'
+require 'uri'
 
 #######################################
 ###### Options Handling ###############
 #######################################
 opts = Trollop::options {
-  version 'v0.1 (c) Nick Petersen'
+  version 'v0.2 (c) Nick Petersen'
   banner <<-EOS
 FortiManager XML API Access
 
 Usage:
-    fmgmain [options] <filenames>+
+    test-fmgapi [options] <filenames>+
 where [options] are:
   EOS
 
-  opt :wsdl_file, 'Location of FMG API WSDL File', :default => './fmg506.wsdl', :type => String
+  # opt :wsdl_file, 'Location of FMG API WSDL File', :default => File.expand_path(File.join(
+  #   File.dirname(__FILE__), 'fmg506.wsdl')), :type => String
+  opt :wsdl_file, 'Location of FMG API WSDL File', :default => "#{__dir__}/fmg506.wsdl"
   opt :fmg_api_url, 'URL & port for FMG', :default => 'https://10.0.2.16:8080', :type => String
   opt :namespace, 'FMG Namespace', :default => 'http://r200806.ws.fmg.fortinet.com/', :type => String
   opt :login, 'FMG API Login ID', :default => 'admin', :type => String
   opt :passwd, 'FMG API Password', :default => '', :type => String
   opt :file, 'Configuration File', :type => String
 }
+
+uri = URI(opts[:fmg_api_url])
+scheme = uri.scheme
+
+Trollop::die :fmg_api_url, 'Did not provide a valid url (be sure to include the http:// or https://)' unless %w(http https).include?(scheme)
+Trollop::die :wsdl_file, 'file does not exist' unless File.exist?(opts[:wsdl_file]) if opts[:wsdl_file]
 
 puts "Executing with the following options:"
 opts.each { |x| puts "#{x}"}
@@ -33,9 +42,6 @@ opts.each { |x| puts "#{x}"}
 ##### Execution #####################
 #####################################
 fmgapi = FmgApi.new(opts[:wsdl_file], opts[:fmg_api_url], opts[:namespace], opts[:login], opts[:passwd])
-fazapi = FmgApi.new(opts[:wsdl_file], 'https://10.0.1.15:8080', opts[:namespace], opts[:login], opts[:passwd])
-fmg100c = FmgApi.new(opts[:wsdl_file], 'https://10.0.1.14:8080', opts[:namespace], opts[:login], '')
-fmglab1 = FmgApi.new(opts[:wsdl_file], 'https://1.1.1.3:8080', opts[:namespace], 'admin', '')
 
 ################################################################################################################
 
