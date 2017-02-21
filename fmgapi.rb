@@ -2,6 +2,7 @@ require 'savon'
 require 'date'
 require 'time'
 require 'gyoku'
+require 'json'
 
 ######################################################################################################################
 ## Version:: 0.1
@@ -126,7 +127,7 @@ class FmgApi
   ##  add_adom({:name => 'adomA'}, newdevices)
   ################################################################################################
   def add_adom(opts = {}, devices=false)
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:is_backup_mode] = opts[:is_backup_mode] ? opts[:is_backup_mode] : '0'
     #querymsg[:VPN_management] = opts[:vpn_management] ? opts[:vpn_management] : '0'
 
@@ -240,7 +241,7 @@ class FmgApi
   #++
   ################################################################################################
   def add_device(opts = {})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
     querymsg[:admin_user] = opts[:admin_user] ? opts[:admin_user] : 'admin'
     querymsg[:password] = opts[:password] ? opts[:password] : ''
@@ -282,7 +283,7 @@ class FmgApi
   #++
   ################################################################################################
   def add_group(opts = {})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
     querymsg[:description] = opts[:description] if opts[:description]
     querymsg[:group_name] = opts[:group_name] if opts[:group_name]
@@ -350,7 +351,7 @@ class FmgApi
   ##  add_policy_package({:policy_package_name => 'pkg-name'}, {:grp => {:oid => 'grp-oid'})
   ################################################################################################
   def add_policy_package(opts = {}, install_targets=false)
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
     querymsg[:is_global] = opts[:is_global] ? opts[:is_global] : '1'
     querymsg[:clone_from] = opts[:clone_from] if opts[:clone_from]
@@ -469,7 +470,7 @@ class FmgApi
   ##  assign_global_policy(:policy_package_name => 'global-policy-1', :all_objects => '1', :install_to_device => '1'}, {:name => 'adomA', :pkg => {:oid => '602'}})
   ################################################################################################
   def assign_global_policy(opts = {}, targets=false)
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'Global'
     querymsg[:policy_package_name] =  opts[:policy_package_name] ? opts[:policy_package_name] : 'default'
     querymsg[:all_objects] = opts[:all_objects] ? opts[:all_objects] : '0'
@@ -529,7 +530,7 @@ class FmgApi
   ##  :is_global    # create this as a global script. 0=no, 1=yes, default=no.
   #################################################################################################
   def create_script(opts = {})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:is_global] = opts[:is_global] ? opts[:is_global] : '0'
     querymsg[:type] = opts[:type] ? opts[:type] : 'CLI'
     querymsg[:description] = opts[:description] ? opts[:description] : 'created via XML API'
@@ -560,7 +561,7 @@ class FmgApi
   ##  delete_adom(:adom_oid => 'adom-oid')
   ################################################################################################
   def delete_adom(opts = {})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       if opts[:adom_name]
@@ -588,7 +589,7 @@ class FmgApi
   ##  delete_config_rev{{dev_id => 'device-id', :rev_id => 'revision-id'}}
   ################################################################################################
   def delete_config_rev(opts = {})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       if opts[:dev_id]
@@ -621,7 +622,7 @@ class FmgApi
   ##  delete_device({:dev_id => 'device-id'})
   ################################################################################################
   def delete_device(opts = {})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       if opts[:dev_id]
@@ -647,7 +648,7 @@ class FmgApi
   ##  delete_group({:grp_id => 'group-id', :adom => 'adom-name'})
   ################################################################################################
   def delete_group(opts = {})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       if opts[:grp_name] && opts[:adom]
@@ -678,7 +679,7 @@ class FmgApi
   ##  :type  #type of script.  CLI or TCL.  defaults to CLI
   ################################################################################################
   def delete_script(opts = {})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:type] = opts[:type] ? opts[:type] : 'CLI'
 
     begin
@@ -745,7 +746,7 @@ class FmgApi
   ##  edit_adom({:name => 'adomA'}, {:serial_number => 'FGVM11111111', :vdom_name => 'vdomA'}, {:name => 'meta1', value => 'value1'})
   ################################################################################################
   def edit_adom(opts = {}, devices=false, meta=false)
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:is_backup_mode] = opts[:is_backup_mode] if opts[:is_backup_mode]
     querymsg[:state] = opts[:state] if opts[:state]
     querymsg[:vpn_management] = opts[:vpn_management] if opts[:vpn_management]
@@ -856,7 +857,7 @@ class FmgApi
   ##  get_adom_by_name(:adom => 'adom_name')
   ################################################################################################
   def edit_group_membership(opts = {})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
 
     begin
@@ -899,7 +900,7 @@ class FmgApi
   ##  get_adom_by_name(:adom => 'adom_name')
   ################################################################################################
   def get_adom_by_name(opts = {})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:names] = opts[:adom] ? opts[:adom] : 'root'
 
     begin
@@ -920,7 +921,7 @@ class FmgApi
   ##  get_adom_by_oid(:adom_id => 'adom_oid')
   #############################################################################################
   def get_adom_by_oid(opts = {})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom_ids] = opts[:adom_id] ? opts[:adom_id] : '3'
 
     begin
@@ -940,7 +941,7 @@ class FmgApi
   ##  get_adom_list()
   #####################################################################
   def get_adom_list
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       exec_soap_query(:get_adom_list,querymsg,:get_adom_list_response,:adom_info)
@@ -963,7 +964,7 @@ class FmgApi
   ##  :adom   # ADOM name.  Defaults to root if not supplied
   #####################################################################################################################
   def get_config (opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] if opts[:adom]
 
     begin
@@ -1001,7 +1002,7 @@ class FmgApi
   ##  :max_revision_number  # if min and max are both passed and min > max then no revision number filter will be used
   #####################################################################################################################
   def get_config_revision_history (opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:checkin_user] = opts[:checkin_user] if opts[:checkin_user]
 
 
@@ -1068,7 +1069,7 @@ class FmgApi
   ##  get_device(:dev_id => 'device-id')
   #####################################################################################################################
   def get_device (opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       if opts[:serial_number]
@@ -1096,7 +1097,7 @@ class FmgApi
   ##  get_device_license_list()
   #####################################################################################################################
   def get_device_license_list
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       exec_soap_query(:get_device_license_list,querymsg,:get_device_license_list_response,:return)
@@ -1118,7 +1119,7 @@ class FmgApi
   ##  get_device_list(:adom => 'adom-name')
   #####################################################################################################################
   def get_device_list (opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
     querymsg[:detail] = 1
 
@@ -1141,7 +1142,7 @@ class FmgApi
   ##  get_device_vdom_list(:dev_id => 'device-id')
   #####################################################################################################################
   def get_device_vdom_list (opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       if opts[:dev_name]
@@ -1178,7 +1179,7 @@ class FmgApi
   ## always hang.
   #####################################################################################################################
   def get_faz_archive (opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     #querymsg[:compression] = 'gzip'
     #querymsg[:zip_password] = 'test'
 
@@ -1215,7 +1216,7 @@ class FmgApi
   ##  get_faz_config()
   #####################################################################################################################
   def get_faz_config
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       result = exec_soap_query(:get_faz_config,querymsg,:get_faz_config_response,:config)
@@ -1244,7 +1245,7 @@ class FmgApi
   ##  get_faz_generated_report({:adom => 'adom_name', :dev_id => 'device_id, :file_name => 'filename', :type => 'type'})
   #####################################################################################################################
   def get_faz_generated_report (opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = 'root'
     querymsg[:report_date] = '2014-04-25T14:36:05+00:00'
     querymsg[:report_name] = 'S-10002_t10002-Bandwidth and Applications Report-2014-04-25-0936'
@@ -1280,7 +1281,7 @@ class FmgApi
   ##  get_group_list (:adom => 'adom_name')
   #####################################################################################################################
   def get_group_list(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:detail] = 1
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
 
@@ -1306,7 +1307,7 @@ class FmgApi
   ##  :adom => 'adom_name'
   #####################################################################################################################
   def get_group(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
 
     begin
@@ -1337,7 +1338,7 @@ class FmgApi
   ##  :task_id
   #####################################################################################################################
   def get_instlog(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:task_id] = opts[:task_id] if opts[:task_id]
 
     begin
@@ -1367,7 +1368,7 @@ class FmgApi
   ##  :adom
   #####################################################################################################################
   def get_package_list(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
 
     begin
@@ -1387,7 +1388,7 @@ class FmgApi
   ##  get_script(:script_name => 'script_name')
   #####################################################################################################################
   def get_script(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     if opts[:script_name]
       querymsg[:name] = opts[:script_name]
@@ -1413,7 +1414,7 @@ class FmgApi
   ##  get script_log({:script_name => 'script_name, :serial_number => 'serial_number})
   #####################################################################################################################
   def get_script_log(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       if opts[:script_name] && opts[:dev_id]
@@ -1444,7 +1445,7 @@ class FmgApi
   ##  :max_logs  # defaults to 1000
   #####################################################################################################################
   def get_script_log_summary(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:max_logs] = opts[:max_logs] ? opts[:max_logs] : '1000'
 
     begin
@@ -1473,7 +1474,7 @@ class FmgApi
   ##  get_system_status()
   #####################################################################################################################
   def get_system_status
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       exec_soap_query_for_get_sys_status(:get_system_status,querymsg,:get_system_status_response)
@@ -1493,7 +1494,7 @@ class FmgApi
   ##  get_task_detail({:task_id => 'task-id', adom=> 'adom_name'})   #if ADOM is not provided it defaults to root ADOM
   #####################################################################################################################
   def get_task_detail(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
     
     begin
@@ -1520,7 +1521,7 @@ class FmgApi
   ##  import_policy({:adom_name => 'root', :dev_id => '234', :vdom_name => 'root'})
   #####################################################################################################################
   def import_policy(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       if opts[:adom_name] && opts[:dev_name] && opts[:vdom_name]
@@ -1579,7 +1580,7 @@ class FmgApi
   ##
   #####################################################################################################################
   def install_config(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:new_rev_name] = opts[:rev_name] if opts[:rev_name]
     querymsg[:install_validate] = opts[:validate] if opts[:validate]
 
@@ -1621,7 +1622,7 @@ class FmgApi
   ##  :end_time    # => '2014-04-01T00:00:00'    latest report time
   #####################################################################################################################
   def list_faz_generated_reports(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
 
       if opts[:start_date] && opts[:end_date]
@@ -1660,7 +1661,7 @@ class FmgApi
   ##  rev_name   # Name of revision to get ID for, if not specified retrieves current revision
   #####################################################################################################################
   def list_revision_id(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:rev_name] = opts[:rev_name] if opts[:rev_name]
 
     begin
@@ -1701,7 +1702,7 @@ class FmgApi
   ## always hang.
   #####################################################################################################################
   def remove_faz_archive (opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       if opts[:adom] && opts[:dev_id] && opts[:file_name] && opts[:type]
@@ -1734,7 +1735,7 @@ class FmgApi
   ##  :rev_name   # Name to give to revision when saved to DB.  If not specified will be default naming.
   #####################################################################################################################
   def retrieve_config(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:new_rev_name] = opts[:rev_name] if opts[:rev_name]
 
     begin
@@ -1763,7 +1764,7 @@ class FmgApi
   ##  revert_config({rev_id => 'rev#', :dev_id => 'XXX'})
   #####################################################################################################################
   def revert_config(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
 
     begin
       if opts[:serial_number] && opts[:rev_id]
@@ -1796,7 +1797,7 @@ class FmgApi
   ##  :adom    # Name of ADOM to run report from/within
   #####################################################################################################################
   def run_faz_report(opts = {})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
     querymsg[:filter] = opts[:filter] if opts[:filter]
 
@@ -1827,7 +1828,7 @@ class FmgApi
   ##  :type       # (values CLI or TCL) [default = CLI]
   #####################################################################################################################
   def run_script(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:is_global] = opts[:is_global] ? opts[:is_global] : 'false'
     querymsg[:run_on_dB] = opts[:run_on_db] ? opts[:run_on_db] : 'false'
     querymsg[:type] = opts[:type] ? opts[:type] : 'CLI'
@@ -1866,7 +1867,7 @@ class FmgApi
   ##
   #####################################################################################################################
   def search_faz_log(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
     querymsg[:check_archive] = opts[:check_archive] ? opts[:check_archive] : '0'
     querymsg[:compression] = opts[:compression] ? opts[:check_compression] : 'tar'
@@ -1901,7 +1902,7 @@ class FmgApi
   ##  search_faz_log({:config =>  "configuration \n configuration \n ..."})
   #####################################################################################################################
   def set_faz_config(opts={})
-    querymsg = @authmsg
+    querymsg = JSON.parse(@authmsg.to_json)
     querymsg[:adom] = opts[:adom] ? opts[:adom] : 'root'
 
     begin
