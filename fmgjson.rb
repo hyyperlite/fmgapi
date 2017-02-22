@@ -1,5 +1,5 @@
 require "json"
-require "net/http"
+require "net/https"
 
 ##########################################################################################################
 # Class FmgJson provides abstraction for Ruby programs in setting up connections and executing queries to
@@ -13,7 +13,7 @@ class FmgJson
     @passwd = passwd
     @session = nil
     @debug = debug
-    @uri = URI("http://#{@host}/jsonrpc")
+    @uri = URI("https://#{@host}/jsonrpc")
     @headers = {'Content-Type' => 'application/json', 'Accept-Encoding' => 'gzip.deflate','Accept'=>'application/json'}
     @id = 1
 
@@ -29,6 +29,8 @@ class FmgJson
 
     begin
       http = Net::HTTP.new(@uri.host,@uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       http.set_debug_output($stdout) if debug == 1
       res = http.post(@uri.path,data.to_json,@headers)
 
@@ -69,6 +71,8 @@ class FmgJson
         end
 
         http = Net::HTTP.new(@uri.host,@uri.port)
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
         http.set_debug_output($stdout) if @debug == 1
         res = http.post(@uri.path,jsonreq.to_json)
         return JSON.parse(res.body)
